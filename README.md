@@ -62,6 +62,7 @@ Toolz solves these issues by bundling essential tools into a single, user-friend
 
 ## Proof of Concept
 For this proposal, I created a proof-of-concept Chrome extension featuring a timer with additional functionality to create an API request to Gemini to retrieve a random timer value.
+
 ![image](https://github.com/user-attachments/assets/d40f352f-70bc-4a4c-b972-2715e979fc28)
 
 ## Mockups
