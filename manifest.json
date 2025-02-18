@@ -1,0 +1,33 @@
+{
+  "manifest_version": 3,
+  "name": "Toolz",
+  "description": "A set of productivity tools including OCR, color picker, screenshot, summarizer, and timer.",
+  "version": "1.0",
+  "icons": {
+    "16": "assets/images/icon16.png",
+    "48": "assets/images/icon48.png",
+    "128": "assets/images/icon128.png"
+  },
+  "action": {
+    "default_popup": "index.html",
+    "default_icon": {
+      "16": "assets/images/icon16.png",
+      "48": "assets/images/icon48.png",
+      "128": "assets/images/icon128.png"
+    }
+  },
+  "permissions": [
+    "activeTab",
+    "scripting",
+    "storage"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["assets/fonts/*", "assets/images/*"],
+      "matches": ["<all_urls>"]
+    }
+  ]
+}
