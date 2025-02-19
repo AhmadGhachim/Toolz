@@ -1,23 +1,23 @@
-@use 'partials/global';
-@use 'partials/variables';
+@use 'partials/global' as *;
+@use 'partials/variables' as *;
 
 .toolz {
   display: flex;
   flex-direction: column;
   width: 100%;
   height: 100%;
-  background-color: variables.$bg-light;
+  background-color: $bg-light;
   overflow: hidden;
-  border: variables.$border-width variables.$border-color solid;
-  padding-left: variables.$padding-medium;
-  padding-right: variables.$padding-medium;
+  border: $border-width $border-color solid;
+  padding-left: $padding-medium;
+  padding-right: $padding-medium;
 }
 
 .toolz__header {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: variables.$gap-small;
+  gap: $gap-small;
   margin-top: 2rem;
 }
 
@@ -35,13 +35,13 @@
   font-family: "Jersey 15", Arial, sans-serif;
   font-weight: 300;
   font-size: 3.5rem;
-  color: variables.$text-heading;
+  color: $text-heading;
 }
 
 .toolz__container {
   display: flex;
   flex-direction: column;
-  gap: variables.$gap-medium;
+  gap: $gap-medium;
   margin-top: 40px;
   width: 100%;
   align-items: center;
@@ -50,69 +50,69 @@
 .tool {
   display: flex;
   align-items: center;
-  gap: variables.$gap-medium;
+  gap: $gap-medium;
   text-decoration: none;
-  padding: variables.$padding-small variables.$padding-medium;
-  border-radius: variables.$border-radius;
+  padding: $padding-small $padding-medium;
+  border-radius: $border-radius;
   transition: background-color 0.3s, transform 0.2s;
   width: 100%;
-  max-width: variables.$max-container-width;
+  max-width: $max-container-width;
 }
 
 .tool:hover {
   transform: translateY(-2px);
 }
 
-// Tool Colors
+
 .tool--ocr {
-  background-color: variables.$tool-ocr;
-  color: variables.$text-dark;
+  background-color: $tool-ocr;
+  color: $text-dark;
 }
 
 .tool--ocr:hover {
-  background-color: variables.$tool-ocr-hover;
+  background-color: $tool-ocr-hover;
 }
 
 .tool--screenshot {
-  background-color: variables.$tool-screenshot;
-  color: variables.$text-dark;
+  background-color: $tool-screenshot;
+  color: $text-dark;
 }
 
 .tool--screenshot:hover {
-  background-color: variables.$tool-screenshot-hover;
+  background-color: $tool-screenshot-hover;
 }
 
 .tool--hex {
-  background-color: variables.$tool-hex;
-  color: variables.$text-dark;
+  background-color: $tool-hex;
+  color: $text-dark;
 }
 
 .tool--hex:hover {
-  background-color: variables.$tool-hex-hover;
+  background-color: $tool-hex-hover;
 }
 
 .tool--timer {
-  background-color: variables.$tool-timer;
-  color: variables.$text-dark;
+  background-color: $tool-timer;
+  color: $text-dark;
 }
 
 .tool--timer:hover {
-  background-color: variables.$tool-timer-hover;
+  background-color: $tool-timer-hover;
 }
 
 .tool--summarizer {
-  background-color: variables.$tool-summarizer;
-  color: variables.$text-dark;
+  background-color: $tool-summarizer;
+  color: $text-dark;
 }
 
 .tool--summarizer:hover {
-  background-color: variables.$tool-summarizer-hover;
+  background-color: $tool-summarizer-hover;
 }
 
 .tool__content {
   display: flex;
   align-items: center;
-  gap: variables.$gap-small;
+  gap: $gap-small;
 }
 
 .tool__image {
