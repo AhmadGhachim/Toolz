@@ -2,9 +2,37 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Toolz - Timer</title>
+    <link rel="stylesheet" href="Timer.css">
 </head>
 <body>
+<main class="timer">
 
+    <div class="timer__container">
+        <header class="timer__header">
+            <a href="../../index.html" class="timer__back-button">←</a>
+            <h1 class="timer__title">Timer</h1>
+        </header>
+
+        <section class="timer__input-section">
+            <label class="timer__label">Set Countdown</label>
+            <div class="timer__inputs">
+                <input type="number" id="minutes" class="timer__input" placeholder="Min" min="0">
+                <input type="number" id="seconds" class="timer__input" placeholder="Sec" min="0" max="59">
+            </div>
+        </section>
+
+        <section class="timer__countdown">
+            <p id="countdown-display">00:00</p>
+        </section>
+
+        <section class="timer__controls">
+            <button id="start" class="timer__button timer__button--play">Play</button>
+            <button id="pause" class="timer__button timer__button--pause">Pause</button>
+            <button id="reset" class="timer__button timer__button--reset">Reset</button>
+        </section>
+    </div>
+</main>
+<script src="Timer.js"></script>
 </body>
 </html>

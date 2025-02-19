@@ -16,6 +16,9 @@
       "128": "assets/images/icon128.png"
     }
   },
+  "background": {
+    "service_worker": "background.js"
+  },
   "permissions": [
     "activeTab",
     "scripting",
@@ -26,7 +29,7 @@
   ],
   "web_accessible_resources": [
     {
-      "resources": ["assets/fonts/*", "assets/images/*"],
+      "resources": ["assets/fonts/*", "assets/images/*", "pages/*", "styles/*"],
       "matches": ["<all_urls>"]
     }
   ]
