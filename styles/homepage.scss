@@ -1,0 +1,126 @@
+@use 'partials/global';
+@use 'partials/variables';
+
+.toolz {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  background-color: variables.$bg-light;
+  overflow: hidden;
+  border: variables.$border-width variables.$border-color solid;
+  padding-left: variables.$padding-medium;
+  padding-right: variables.$padding-medium;
+}
+
+.toolz__header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: variables.$gap-small;
+  margin-top: 2rem;
+}
+
+.toolz__logo {
+  width: 50px;
+  height: 50px;
+}
+
+.toolz__logo-image {
+  width: 100%;
+  height: auto;
+}
+
+.toolz__title {
+  font-family: "Jersey 15", Arial, sans-serif;
+  font-weight: 300;
+  font-size: 3.5rem;
+  color: variables.$text-heading;
+}
+
+.toolz__container {
+  display: flex;
+  flex-direction: column;
+  gap: variables.$gap-medium;
+  margin-top: 40px;
+  width: 100%;
+  align-items: center;
+}
+
+.tool {
+  display: flex;
+  align-items: center;
+  gap: variables.$gap-medium;
+  text-decoration: none;
+  padding: variables.$padding-small variables.$padding-medium;
+  border-radius: variables.$border-radius;
+  transition: background-color 0.3s, transform 0.2s;
+  width: 100%;
+  max-width: variables.$max-container-width;
+}
+
+.tool:hover {
+  transform: translateY(-2px);
+}
+
+// Tool Colors
+.tool--ocr {
+  background-color: variables.$tool-ocr;
+  color: variables.$text-dark;
+}
+
+.tool--ocr:hover {
+  background-color: variables.$tool-ocr-hover;
+}
+
+.tool--screenshot {
+  background-color: variables.$tool-screenshot;
+  color: variables.$text-dark;
+}
+
+.tool--screenshot:hover {
+  background-color: variables.$tool-screenshot-hover;
+}
+
+.tool--hex {
+  background-color: variables.$tool-hex;
+  color: variables.$text-dark;
+}
+
+.tool--hex:hover {
+  background-color: variables.$tool-hex-hover;
+}
+
+.tool--timer {
+  background-color: variables.$tool-timer;
+  color: variables.$text-dark;
+}
+
+.tool--timer:hover {
+  background-color: variables.$tool-timer-hover;
+}
+
+.tool--summarizer {
+  background-color: variables.$tool-summarizer;
+  color: variables.$text-dark;
+}
+
+.tool--summarizer:hover {
+  background-color: variables.$tool-summarizer-hover;
+}
+
+.tool__content {
+  display: flex;
+  align-items: center;
+  gap: variables.$gap-small;
+}
+
+.tool__image {
+  width: 40px;
+  height: 40px;
+}
+
+.tool__label {
+  font-size: 1.125rem;
+  font-weight: bold;
+}
