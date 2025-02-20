@@ -8,27 +8,25 @@ const secondsInput = document.getElementById('seconds');
 let countdownInterval = null;
 let totalSeconds = 0;
 
-
 function updateCountdownDisplay() {
     const mins = Math.floor(totalSeconds / 60);
     const secs = totalSeconds % 60;
     countdownDisplay.textContent = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
 }
 
-
 function startCountdown() {
-
     if (countdownInterval) return;
 
-    const mins = parseInt(minutesInput.value || '0', 10);
-    const secs = parseInt(secondsInput.value || '0', 10);
+    if (totalSeconds === 0) { // Only fetch values initially
+        const mins = parseInt(minutesInput.value || '0', 10);
+        const secs = parseInt(secondsInput.value || '0', 10);
 
+        totalSeconds = mins * 60 + secs;
 
-    totalSeconds = mins * 60 + secs;
-
-    if (totalSeconds === 0) {
-        alert('Please enter a time greater than 0.');
-        return;
+        if (totalSeconds === 0) {
+            alert('Please enter a time greater than 0.');
+            return;
+        }
     }
 
     countdownInterval = setInterval(() => {
@@ -46,7 +44,7 @@ function startCountdown() {
 
 function pauseCountdown() {
     if (countdownInterval) {
-        clearInterval(countdownInterval); // Clear interval
+        clearInterval(countdownInterval);
         countdownInterval = null;
     }
 }
