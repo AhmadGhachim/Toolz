@@ -17,7 +17,7 @@ function updateCountdownDisplay() {
 function startCountdown() {
     if (countdownInterval) return;
 
-    if (totalSeconds === 0) { // Only fetch values initially
+    if (totalSeconds === 0) {
         const mins = parseInt(minutesInput.value || '0', 10);
         const secs = parseInt(secondsInput.value || '0', 10);
 
