@@ -9,77 +9,110 @@
   height: 100%;
   overflow: hidden;
   background-color: $tool-hex;
-}
 
-.hex__container {
-  width: 94%;
-  height: 96%;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: center;
-  background-color: $bg-light;
-  padding: $padding-medium;
-  border-radius: 1.5rem;
-  overflow: hidden;
-}
+  &__container {
+    width: 94%;
+    height: 96%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    background-color: $bg-light;
+    padding: $padding-medium;
+    border-radius: 1.5rem;
+    overflow: hidden;
+  }
 
-.hex__header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-  margin-bottom: $gap-medium;
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-bottom: $gap-medium;
 
-  .hex__back-button {
-    text-decoration: none;
-    color: $text-dark;
-    font-size: 2rem;
-    cursor: pointer;
+    &-button {
+      text-decoration: none;
+      color: $text-dark;
+      font-size: 2rem;
+      cursor: pointer;
 
-    &:hover {
+      &:hover {
+        color: $text-heading;
+      }
+    }
+
+    &-title {
+      font-size: 3rem;
+      font-weight: 300;
       color: $text-heading;
+      font-family: "Outfit", Arial, sans-serif;
     }
   }
 
-  .hex__title {
-    font-weight: 300;
-    font-size: 3rem;
-    color: $text-heading;
-    font-family: "Jersey 15", Arial, sans-serif;
-  }
-}
-
-.hex__content {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-
-  .hex__button {
-    padding: $padding-small $padding-medium;
-    font-family: 'Outfit', sans-serif;
-    font-size: 1rem;
-    font-weight: bold;
-    border: none;
-    border-radius: $border-radius;
-    cursor: pointer;
-    background-color: $tool-hex;
-    color: #fff;
-    transition: background-color 0.3s, transform 0.2s;
-
-    &:hover {
-      background-color: $tool-hex-hover;
-      transform: translateY(-2px);
-    }
-  }
-
-  .hex__notification {
-    margin-top: $gap-medium;
+  &__instructions {
     text-align: center;
-    font-size: 1rem;
-    font-family: "Outfit", Arial, sans-serif;
+    font-size: 1.2rem;
     color: $text-dark;
+    margin-bottom: $gap-medium;
+  }
+
+  &__dynamic-display {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: $gap-medium;
+    width: 100%;
+    padding: $gap-medium 0;
+
+    .hex__color-square {
+      width: 80px;
+      height: 40px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 1rem;
+      font-weight: bold;
+      color: $text-dark;
+      border-radius: $border-radius;
+      background-color: $bg-light;
+      cursor: pointer;
+      transition: transform 0.3s, box-shadow 0.3s;
+
+      &:hover {
+        transform: scale(1.05);
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      }
+    }
+  }
+
+  &__footer {
+    margin-top: auto;
+    display: flex;
+    gap: $gap-medium;
+
+    .hex__button {
+      padding: $padding-small $padding-medium;
+      background-color: $tool-hex;
+      color: #fff;
+      font-weight: bold;
+      border-radius: $border-radius;
+      cursor: pointer;
+      transition: background-color 0.3s;
+
+      &:hover {
+        background-color: $tool-hex-hover;
+      }
+    }
+  }
+
+  &__notification {
+    width: 90%;
+    text-align: center;
+    padding: $padding-small;
+    font-size: 0.9rem;
+    font-weight: bold;
+    color: #fff;
+    border-radius: $border-radius;
+    margin-top: $gap-small;
   }
 }

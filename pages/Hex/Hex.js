@@ -1,78 +1,90 @@
-// Attach the start button listener
-document.getElementById("start-hex-picker").addEventListener("click", (event) => {
-    console.log("Start button clicked. Initializing color picker process.");
-    event.stopPropagation();
-    initializeColorPicker();
-});
+// Wait until DOM is ready
+window.addEventListener("DOMContentLoaded", () => {
+    const container = document.querySelector(".hex__container");
+    const hexDisplay = document.getElementById("hexDynamicDisplay");
+    const pickColorButton = document.getElementById("pickColorButton");
+    const clearMemoryButton = document.getElementById("clearMemoryButton");
 
-// Initialize the color picker process
-function initializeColorPicker() {
-    const notification = document.getElementById("notification");
-    notification.textContent = "Hover over elements to find the hex color. Click to copy the hex value.";
-    notification.style.color = "#333";
-    console.log("Adding hover and click event listeners...");
-    document.addEventListener("mouseover", handleHover);
-    document.addEventListener("click", handleClick);
-}
+    // Notification function
+    const showNotification = (background, text) => {
+        const notification = document.createElement("p");
+        notification.className = "hex__notification";
+        notification.style.backgroundColor = background;
+        notification.textContent = text;
 
-// Handle hover to display the element's hex color in the notification
-function handleHover(event) {
-    if (event.target.id === "start-hex-picker") return;
+        container.appendChild(notification);
 
-    const hoveredElement = event.target;
-    console.log("Hovering over element:", hoveredElement);
+        setTimeout(() => {
+            notification.remove();
+        }, 2000);
+    };
 
-    const computedStyle = window.getComputedStyle(hoveredElement);
-    const backgroundColor = computedStyle.backgroundColor;
+    // Render saved Hex values as dynamic squares
+    const renderHexColors = () => {
+        hexDisplay.innerHTML = ""; // Clear existing elements
+        chrome.storage.local.get("color_hex_code", (data) => {
+            const savedColors = data.color_hex_code || [];
+            savedColors.forEach((hexCode) => {
+                const colorBox = document.createElement("div");
+                colorBox.className = "hex__color-square";
+                colorBox.style.backgroundColor = hexCode;
+                colorBox.textContent = hexCode;
+                colorBox.addEventListener("click", () => {
+                    navigator.clipboard.writeText(hexCode)
+                        .then(() => {
+                            showNotification("#e19526", "Hex code copied to clipboard!");
+                        })
+                        .catch(() => {
+                            showNotification("#ad5049", "Failed to copy Hex code.");
+                        });
+                });
+                hexDisplay.appendChild(colorBox);
+            });
+        });
+    };
 
-    const hexColor = rgbToHex(backgroundColor);
-    console.log(`Computed Hex Value while hovering: ${hexColor}`);
+    // "Pick Color" button click event
+    pickColorButton.addEventListener("click", () => {
+        chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+            const activeTab = tabs[0];
 
-    const notification = document.getElementById("notification");
-    notification.textContent = `Hovering Hex Value: ${hexColor}`;
-}
+            // Check if the current page is accessible
+            if (!activeTab || activeTab.url.startsWith("chrome://") || activeTab.url.startsWith("file://")) {
+                showNotification("#ad5049", "Cannot pick color from this page.");
+                return;
+            }
 
-// Handle click to copy the hex color to clipboard and notify the user
-function handleClick(event) {
-    if (event.target.id === "start-hex-picker") {
-        console.log("Ignoring click on start button.");
-        return;
-    }
+            if (!window.EyeDropper) {
+                showNotification("#ad5049", "Your browser does not support the EyeDropper API.");
+                return;
+            }
 
-    const element = event.target;
-    console.log("Clicked on element:", element);
-
-    const computedStyle = window.getComputedStyle(element);
-    const backgroundColor = computedStyle.backgroundColor;
-    const hexColor = rgbToHex(backgroundColor);
-    console.log(`Hex Value to copy: ${hexColor}`);
-
-    const notification = document.getElementById("notification");
-
-    navigator.clipboard.writeText(hexColor).then(() => {
-        notification.textContent = `Copied ${hexColor} to clipboard!`;
-        notification.style.color = "#007BFF";
-        console.log("Successfully copied the hex color to clipboard.");
-    }).catch(() => {
-        notification.textContent = "Failed to copy!";
-        notification.style.color = "#FF0000";
-        console.warn("Failed to copy the hex color to clipboard.");
+            // Activate EyeDropper API and save the selected color
+            const eyeDropper = new EyeDropper();
+            eyeDropper.open()
+                .then((result) => {
+                    chrome.storage.local.get("color_hex_code", (data) => {
+                        const colors = data.color_hex_code || [];
+                        colors.push(result.sRGBHex);
+                        chrome.storage.local.set({ color_hex_code: colors }, () => {
+                            renderHexColors(); // Refresh color display
+                        });
+                    });
+                })
+                .catch(() => {
+                    showNotification("#ad5049", "Failed to pick color.");
+                });
+        });
     });
 
-    console.log("Removing event listeners after valid click...");
-    cleanupEvents();
-}
+    // "Clear Memory" button click event
+    clearMemoryButton.addEventListener("click", () => {
+        chrome.storage.local.remove("color_hex_code", () => {
+            renderHexColors(); // Clear color display
+            showNotification("#e19526", "Memory cleared successfully!");
+        });
+    });
 
-// Cleanup: Remove the event listeners
-function cleanupEvents() {
-    console.log("Cleaning up hover and click event listeners...");
-    document.removeEventListener("mouseover", handleHover);
-    document.removeEventListener("click", handleClick);
-}
-
-// Convert RGB color to Hex format
-function rgbToHex(rgb) {
-    const rgbArray = rgb.match(/\d+/g).map(Number);
-    console.log("Converted RGB array:", rgbArray);
-    return `#${rgbArray.map(val => val.toString(16).padStart(2, '0')).join('')}`;
-}
+    // Load saved Hex values initially
+    renderHexColors();
+});
