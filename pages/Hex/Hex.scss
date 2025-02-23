@@ -30,22 +30,23 @@
     width: 100%;
     margin-bottom: $gap-medium;
 
-    &-button {
-      text-decoration: none;
-      color: $text-dark;
-      font-size: 2rem;
-      cursor: pointer;
+  }
 
-      &:hover {
-        color: $text-heading;
-      }
-    }
+  &__title{
+    font-weight: 300;
+    font-size: 3rem;
+    color: $text-heading;
+    font-family: "Jersey 15", Arial, sans-serif;
+  }
 
-    &-title {
-      font-size: 3rem;
-      font-weight: 300;
+  &__back-button {
+    text-decoration: none;
+    color: $text-dark;
+    font-size: 2rem;
+    cursor: pointer;
+
+    &:hover {
       color: $text-heading;
-      font-family: "Outfit", Arial, sans-serif;
     }
   }
 
@@ -58,15 +59,35 @@
 
   &__dynamic-display {
     display: flex;
+    justify-content: center;
+    align-items: center;
     flex-direction: row;
     flex-wrap: wrap;
     gap: $gap-medium;
     width: 100%;
     padding: $gap-medium 0;
+    overflow-y: auto;
+
+    &::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: $tool-hex;
+      border-radius: 5px;
+    }
+
+    &::-webkit-scrollbar-thumb:hover {
+      background: $tool-hex-hover;
+    }
 
     .hex__color-square {
       width: 80px;
-      height: 40px;
+      height: 60px;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -74,6 +95,7 @@
       font-weight: bold;
       color: $text-dark;
       border-radius: $border-radius;
+      border: 1px solid $text-dark;
       background-color: $bg-light;
       cursor: pointer;
       transition: transform 0.3s, box-shadow 0.3s;
@@ -89,6 +111,7 @@
     margin-top: auto;
     display: flex;
     gap: $gap-medium;
+    padding-top: $gap-medium;
 
     .hex__button {
       padding: $padding-small $padding-medium;

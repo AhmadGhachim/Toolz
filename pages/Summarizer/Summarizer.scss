@@ -114,12 +114,12 @@
     }
 
     &::-webkit-scrollbar-thumb {
-      background: black;
+      background: $tool-summarizer;
       border-radius: 5px;
     }
 
     &::-webkit-scrollbar-thumb:hover {
-      background: rgba(0, 0, 0, 0.8); /* Slightly lighter black on hover */
+      background: $tool-summarizer-hover;
     }
 
   }
@@ -135,7 +135,6 @@
     padding: $padding-small $padding-medium;
     font-size: 1rem;
     font-weight: bold;
-    border: none;
     border-radius: $border-radius;
     cursor: pointer;
     background-color: $tool-summarizer;

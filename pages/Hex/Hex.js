@@ -1,3 +1,17 @@
+// Helper function to calculate brightness of a hex color
+const getBrightness = (hex) => {
+
+    const rgb = parseInt(hex.slice(1), 16);
+    const r = (rgb >> 16) & 0xff;
+    const g = (rgb >> 8) & 0xff;
+    const b = (rgb >> 0) & 0xff;
+
+    // Calculate brightness according to ITU-R BT.709 formula
+    return (r * 0.299 + g * 0.587 + b * 0.114);
+};
+
+
+
 // Wait until DOM is ready
 window.addEventListener("DOMContentLoaded", () => {
     const container = document.querySelector(".hex__container");
@@ -28,7 +42,10 @@ window.addEventListener("DOMContentLoaded", () => {
                 const colorBox = document.createElement("div");
                 colorBox.className = "hex__color-square";
                 colorBox.style.backgroundColor = hexCode;
+                const brightness = getBrightness(hexCode);
+                colorBox.style.color = brightness > 128 ? "#000" : "#fff";
                 colorBox.textContent = hexCode;
+
                 colorBox.addEventListener("click", () => {
                     navigator.clipboard.writeText(hexCode)
                         .then(() => {
@@ -40,6 +57,7 @@ window.addEventListener("DOMContentLoaded", () => {
                 });
                 hexDisplay.appendChild(colorBox);
             });
+
         });
     };
 
@@ -59,6 +77,7 @@ window.addEventListener("DOMContentLoaded", () => {
                 return;
             }
 
+
             // Activate EyeDropper API and save the selected color
             const eyeDropper = new EyeDropper();
             eyeDropper.open()
@@ -70,12 +89,15 @@ window.addEventListener("DOMContentLoaded", () => {
                             renderHexColors(); // Refresh color display
                         });
                     });
+
                 })
                 .catch(() => {
                     showNotification("#ad5049", "Failed to pick color.");
                 });
+
         });
     });
+
 
     // "Clear Memory" button click event
     clearMemoryButton.addEventListener("click", () => {

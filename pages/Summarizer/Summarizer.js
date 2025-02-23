@@ -146,7 +146,7 @@ summarizeButton.addEventListener("click", async () => {
         // Step 1: Extract the content
         const articleContent = await extractArticleContent();
 
-        if (articleContent && articleContent.trim() && articleContent.trim() !== "Content not found.") {
+        if (articleContent && articleContent.trim() !== "Content not found.") {
             // Step 2: Pass the content to the Gemini API
             summaryOutput.value = "Generating summary... Please wait.";
             const summary = await fetchSummary(articleContent);
@@ -156,7 +156,7 @@ summarizeButton.addEventListener("click", async () => {
         }
     } catch (error) {
         console.error("Error during extraction or summarization:", error);
-        summaryOutput.value = `Failed: ${error}`;
+        summaryOutput.value = `Webpage content not accessible: ${error}`;
     }
 });
 
