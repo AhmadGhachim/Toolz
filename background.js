@@ -41,6 +41,12 @@ function resetCountdown() {
 
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+
+    if (message.type === 'processOCR') {
+        processImageWithGemini(message.imageData);
+        sendResponse({status: "processing"});
+        return true;
+    }
     if (message.command === "start") {
         const newSeconds = message.totalSeconds || null;
         if (newSeconds !== null && !countdownInterval) {
@@ -59,3 +65,40 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     }
 });
 
+
+const GEMINI_API_KEY = 'AIzaSyChmbtA0ZpyDhoRXXOTeU9r7L5f7tRBU5Q';
+const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent';
+
+
+async function processImageWithGemini(imageData) {
+    try {
+        const response = await fetch(GEMINI_API_URL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${GEMINI_API_KEY}`
+            },
+            body: JSON.stringify({
+                contents: [{
+                    parts: [{
+                        text: "Extract text from this image"
+                    }, {
+                        inlineData: {
+                            mimeType: "image/png",
+                            data: imageData.split(',')[1]
+                        }
+                    }]
+                }]
+            })
+        });
+
+        const result = await response.json();
+        const extractedText = result.candidates[0].content.parts[0].text;
+
+        // Store result instead of sending to popup
+        chrome.storage.local.set({ ocrResult: extractedText });
+    } catch (error) {
+        console.error('OCR processing failed:', error);
+        chrome.storage.local.set({ ocrError: error.message });
+    }
+}

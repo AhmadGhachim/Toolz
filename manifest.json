@@ -25,7 +25,8 @@
         "<all_urls>"
       ],
       "js": [
-        "hexPickerContent.js"
+        "hexPickerContent.js",
+        "ocrContent.js"
       ]
     }
   ],
@@ -33,14 +34,15 @@
     "activeTab",
     "scripting",
     "storage",
-    "clipboardWrite"
+    "clipboardWrite",
+    "desktopCapture"
   ],
   "host_permissions": [
     "<all_urls>"
   ],
   "web_accessible_resources": [
     {
-      "resources": ["assets/fonts/*", "assets/images/*", "pages/*", "styles/*"],
+      "resources": ["assets/fonts/*", "assets/scripts/*", "assets/images/*", "pages/*", "styles/*", "ocrContent.js"],
       "matches": ["<all_urls>"]
     }
   ]

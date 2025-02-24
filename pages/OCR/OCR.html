@@ -2,9 +2,30 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="OCR.css">
+    <title>Toolz - OCR Extractor</title>
 </head>
 <body>
+<main class="ocr">
+    <div class="ocr__container">
 
+        <header class="ocr__header">
+            <a href="../../index.html" class="ocr__back-button">←</a>
+            <h1 class="ocr__title">OCR Extractor</h1>
+        </header>
+
+        <section class="ocr__output-section">
+            <label for="ocr-output" class="ocr__label">Extracted Text</label>
+            <textarea id="ocr-output" class="ocr__textarea" readonly placeholder="Extracted text will appear here."></textarea>
+        </section>
+
+        <section class="ocr__controls">
+            <button id="extract-text-button" class="ocr__button">Extract Text</button>
+        </section>
+
+    </div>
+    <script src="OCR.js"></script>
+</main>
 </body>
 </html>

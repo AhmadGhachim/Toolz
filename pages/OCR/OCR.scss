@@ -1,0 +1,123 @@
+@use '../../styles/partials/global' as *;
+@use '../../styles/partials/variables' as *;
+
+.ocr {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background-color: $tool-ocr;
+}
+
+.ocr__container {
+  width: 94%;
+  height: 96%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  background-color: $bg-light;
+  padding: $padding-medium;
+  border-radius: 1.5rem;
+  overflow: hidden;
+}
+
+.ocr__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-bottom: $gap-medium;
+
+  .ocr__back-button {
+    text-decoration: none;
+    color: $text-dark;
+    font-size: 2rem;
+    cursor: pointer;
+
+    &:hover {
+      color: $text-heading;
+    }
+  }
+
+  .ocr__title {
+    font-weight: 300;
+    font-size: 3rem;
+    color: $text-heading;
+    font-family: "Jersey 15", sans-serif;
+  }
+}
+
+.ocr__input-section,
+.ocr__output-section {
+  width: 100%;
+  margin-bottom: $gap-medium;
+
+  .ocr__label {
+    font-size: 1.25rem;
+    color: $text-dark;
+    margin-bottom: $gap-small;
+    display: inline-block;
+  }
+
+  .ocr__input,
+  .ocr__textarea {
+    width: 100%;
+    font-family: "Outfit", "Arial", sans-serif;
+    font-size: 1rem;
+    color: $text-heading;
+    background-color: $bg-light;
+    border: 2px solid $text-dark;
+    border-radius: $border-radius;
+    padding: $padding-small;
+    resize: none;
+
+    &:focus {
+      outline: none;
+      border-color: $tool-ocr-hover;
+    }
+
+    &::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: $tool-ocr;
+      border-radius: 5px;
+    }
+
+    &::-webkit-scrollbar-thumb:hover {
+      background: $tool-ocr-hover;
+    }
+  }
+
+  .ocr__textarea {
+    height: 200px;
+    resize: none;
+    overflow-y: auto;
+  }
+}
+
+.ocr__controls {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+
+  .ocr__button {
+    padding: $padding-small $padding-medium;
+    font-size: 1rem;
+    font-weight: bold;
+    border-radius: $border-radius;
+    cursor: pointer;
+    background-color: $tool-ocr;
+    color: #fff;
+    transition: background-color 0.3s, transform 0.2s;
+
+    &:hover {
+      background-color: $tool-ocr-hover;
+      transform: translateY(-2px);
+    }
+  }
+}

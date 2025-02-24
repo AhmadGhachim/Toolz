@@ -62,12 +62,10 @@ async function extractArticleContent() {
 
                     // Check and handle results from scripting API
                     if (chrome.runtime.lastError) {
-                        console.error("Error in executeScript:", chrome.runtime.lastError.message);
                         return reject(`Script execution error: ${chrome.runtime.lastError.message}`);
                     }
 
                     if (!results || results.length === 0) {
-                        console.error("No results returned from executeScript.");
                         return reject("Error: Failed to retrieve results from the page.");
                     }
 
