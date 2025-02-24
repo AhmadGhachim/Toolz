@@ -11,7 +11,6 @@ const getBrightness = (hex) => {
 };
 
 
-// Wait until DOM is ready
 window.addEventListener("DOMContentLoaded", () => {
     const container = document.querySelector(".hex__container");
     const hexDisplay = document.getElementById("hexDynamicDisplay");
@@ -60,7 +59,6 @@ window.addEventListener("DOMContentLoaded", () => {
         });
     };
 
-    // "Pick Color" button click event
     pickColorButton.addEventListener("click", () => {
         chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
             const activeTab = tabs[0];
@@ -77,7 +75,6 @@ window.addEventListener("DOMContentLoaded", () => {
             }
 
 
-            // Activate EyeDropper API and save the selected color
             const eyeDropper = new EyeDropper();
             eyeDropper.open()
                 .then((result) => {
@@ -85,7 +82,7 @@ window.addEventListener("DOMContentLoaded", () => {
                         const colors = data.color_hex_code || [];
                         colors.push(result.sRGBHex);
                         chrome.storage.local.set({ color_hex_code: colors }, () => {
-                            renderHexColors(); // Refresh color display
+                            renderHexColors();
                         });
                     });
 
@@ -99,7 +96,6 @@ window.addEventListener("DOMContentLoaded", () => {
     });
 
 
-    // "Clear Memory" button click event
     clearMemoryButton.addEventListener("click", () => {
         chrome.storage.local.remove("color_hex_code", () => {
             renderHexColors(); // Clear color display
@@ -107,6 +103,5 @@ window.addEventListener("DOMContentLoaded", () => {
         });
     });
 
-    // Load saved Hex values initially
     renderHexColors();
 });

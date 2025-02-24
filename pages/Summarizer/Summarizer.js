@@ -137,7 +137,6 @@ async function fetchSummary(articleContent) {
 /**
  * Handles the "Summarize Page" button click event.
  * Extracts content, sends it to the API, and displays the summary.
- * Includes robust error handling for all stages.
  */
 summarizeButton.addEventListener("click", async () => {
     summaryOutput.value = "Extracting content...";
