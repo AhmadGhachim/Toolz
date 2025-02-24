@@ -11,15 +11,15 @@
   background-color: $tool-hex;
 
   &__container {
-    width: 94%;
-    height: 96%;
+    width: 92%;
+    height: 94%;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
     background-color: $bg-light;
     padding: $padding-medium;
-    border-radius: 1.5rem;
+    border-radius: 1rem;
     overflow: hidden;
   }
 
@@ -28,13 +28,12 @@
     justify-content: space-between;
     align-items: center;
     width: 100%;
-    margin-bottom: $gap-medium;
-
+    margin-bottom: $gap-small;
   }
 
-  &__title{
+  &__title {
     font-weight: 300;
-    font-size: 3rem;
+    font-size: 2.5rem;
     color: $text-heading;
     font-family: "Jersey 15", Arial, sans-serif;
   }
@@ -42,7 +41,7 @@
   &__back-button {
     text-decoration: none;
     color: $text-dark;
-    font-size: 2rem;
+    font-size: 1.25rem;
     cursor: pointer;
 
     &:hover {
@@ -52,9 +51,9 @@
 
   &__instructions {
     text-align: center;
-    font-size: 1.2rem;
+    font-size: 1rem;
     color: $text-dark;
-    margin-bottom: $gap-medium;
+    margin-bottom: $gap-small;
   }
 
   &__dynamic-display {
@@ -63,13 +62,13 @@
     align-items: center;
     flex-direction: row;
     flex-wrap: wrap;
-    gap: $gap-medium;
+    gap: $gap-small;
     width: 100%;
-    padding: $gap-medium 0;
+    padding: $gap-small 0;
     overflow-y: auto;
 
     &::-webkit-scrollbar {
-      width: 8px;
+      width: 6px;
     }
 
     &::-webkit-scrollbar-track {
@@ -86,12 +85,12 @@
     }
 
     .hex__color-square {
-      width: 80px;
-      height: 60px;
+      width: 70px;
+      height: 50px;
       display: flex;
       justify-content: center;
       align-items: center;
-      font-size: 1rem;
+      font-size: 0.875rem;
       font-weight: bold;
       color: $text-dark;
       border-radius: $border-radius;
@@ -102,7 +101,7 @@
 
       &:hover {
         transform: scale(1.05);
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
       }
     }
   }
@@ -110,11 +109,11 @@
   &__footer {
     margin-top: auto;
     display: flex;
-    gap: $gap-medium;
-    padding-top: $gap-medium;
+    gap: $gap-small;
+    padding-top: $gap-small;
 
     .hex__button {
-      padding: $padding-small $padding-medium;
+      padding: $padding-small $padding-small;
       background-color: $tool-hex;
       color: #fff;
       font-weight: bold;
@@ -132,7 +131,7 @@
     width: 90%;
     text-align: center;
     padding: $padding-small;
-    font-size: 0.9rem;
+    font-size: 0.8rem;
     font-weight: bold;
     color: #fff;
     border-radius: $border-radius;

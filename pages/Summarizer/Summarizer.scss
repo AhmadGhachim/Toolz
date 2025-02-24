@@ -12,15 +12,15 @@
 }
 
 .summarizer__container {
-  width: 94%;
-  height: 96%;
+  width: 92%;
+  height: 94%;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
   background-color: $bg-light;
   padding: $padding-medium;
-  border-radius: 1.5rem;
+  border-radius: 1rem;
   overflow: hidden;
 }
 
@@ -29,12 +29,12 @@
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  margin-bottom: $gap-medium;
+  margin-bottom: $gap-small;
 
   .summarizer__back-button {
     text-decoration: none;
     color: $text-dark;
-    font-size: 2rem;
+    font-size: 1.25rem;
     cursor: pointer;
 
     &:hover {
@@ -44,7 +44,7 @@
 
   .summarizer__title {
     font-weight: 300;
-    font-size: 3rem;
+    font-size: 2.5rem;
     color: $text-heading;
     font-family: "Jersey 15", Arial, sans-serif;
   }
@@ -52,28 +52,24 @@
 
 .summarizer__output {
   width: 100%;
-  margin-bottom: $gap-medium;
-
-
+  margin-bottom: $gap-small;
 
   .summarizer__label {
-    font-size: 1.25rem;
+    font-size: 1rem;
     color: $text-dark;
     margin-bottom: $gap-small;
     display: inline-block;
     vertical-align: middle;
-
   }
 
   .clipboard-icon {
-    width: 20px;
-    height: 20px;
-    margin-left: 10px;
+    width: 15px;
+    height: 15px;
+    margin-left: 8px;
     margin-bottom: $gap-small;
     cursor: pointer;
     display: inline-block;
     vertical-align: middle;
-
 
     &:hover {
       opacity: 0.8;
@@ -86,12 +82,12 @@
 
   .summarizer__textarea {
     width: 100%;
-    height: 300px;
+    height: 250px;
     font-family: "Outfit", "Arial", "sans-serif";
     font-weight: 300;
     font-style: normal;
     line-height: 1.6;
-    font-size: 1rem;
+    font-size: 0.875rem;
     color: $text-heading;
     background-color: $bg-light;
     border: 2px solid $text-dark;
@@ -106,7 +102,7 @@
     }
 
     &::-webkit-scrollbar {
-      width: 8px;
+      width: 6px;
     }
 
     &::-webkit-scrollbar-track {
@@ -121,7 +117,6 @@
     &::-webkit-scrollbar-thumb:hover {
       background: $tool-summarizer-hover;
     }
-
   }
 }
 
@@ -132,8 +127,8 @@
   width: 100%;
 
   .summarizer__button {
-    padding: $padding-small $padding-medium;
-    font-size: 1rem;
+    padding: $padding-small $padding-small;
+    font-size: 0.875rem;
     font-weight: bold;
     border-radius: $border-radius;
     cursor: pointer;
@@ -152,7 +147,7 @@
   margin-top: auto;
 
   .summarizer__disclaimer {
-    font-size: 0.75rem;
+    font-size: 0.65rem;
     color: $text-dark;
     text-align: center;
   }
