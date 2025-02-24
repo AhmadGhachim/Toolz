@@ -29,12 +29,12 @@
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  margin-bottom: $gap-small;
+  margin-bottom: $gap-medium;
 
   .timer__back-button {
     text-decoration: none;
     color: $text-dark;
-    font-size: 1.25rem;
+    font-size: 1.5rem;
     cursor: pointer;
 
     &:hover {
@@ -44,7 +44,7 @@
 
   .timer__title {
     font-weight: 300;
-    font-size: 2.5rem;
+    font-size: 3rem;
     color: $text-heading;
     font-family: "Jersey 15", Arial, sans-serif;
   }
