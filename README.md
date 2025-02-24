@@ -2,6 +2,23 @@
 
 ![Logo](https://github.com/user-attachments/assets/3aa80510-eccc-4269-af6b-23b4e5f1fa20)
 
+## Load Chrome Extension (Dev Mode)
+
+1.  **Clone Repo:**
+    ```bash
+    git clone https://github.com/AhmadGhachim/Toolz.git
+    ```
+
+2.  **Chrome Extensions Page:**
+    *   Open Chrome, go to `chrome://extensions/`
+    *   Enable "Developer mode" (top right).
+
+3.  **Load Unpacked:**
+    *   Click "Load unpacked" (top left).
+    *   Select your cloned extension folder.
+
+4.  **Done!** Extension is loaded. Refresh extension page after code changes.
+
 ## Overview
 **Toolz** is a versatile Chrome extension designed to eliminate the need for multiple browser extensions by offering a suite of essential utilities in one package. Each tool is represented by a unique, pixelated character that enhances the user experience, making interactions more engaging and intuitive.
 
