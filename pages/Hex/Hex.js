@@ -11,7 +11,6 @@ const getBrightness = (hex) => {
 };
 
 
-
 // Wait until DOM is ready
 window.addEventListener("DOMContentLoaded", () => {
     const container = document.querySelector(".hex__container");
@@ -94,6 +93,7 @@ window.addEventListener("DOMContentLoaded", () => {
                 .catch(() => {
                     showNotification("#ad5049", "Failed to pick color.");
                 });
+
 
         });
     });

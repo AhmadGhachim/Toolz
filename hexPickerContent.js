@@ -1,6 +1,3 @@
-// Content script injected into webpages
-console.log("Hex Picker Content Script Injected");
-
 // Listen for messages to trigger the EyeDropper API
 chrome.runtime.onMessage.addListener((message, sender) => {
     if (message.from === "popup" && message.query === "eye_dropper_clicked") {
@@ -30,3 +27,4 @@ chrome.runtime.onMessage.addListener((message, sender) => {
         }, 500);
     }
 });
+
