@@ -1,10 +1,35 @@
+<!-- pages/OCR/OCR.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="OCR.css">
+    <title>Toolz - OCR</title>
 </head>
 <body>
+<main class="ocr">
+    <div class="ocr__container">
+        <header class="ocr__header">
+            <a href="../../index.html" class="ocr__back-button">←</a>
+            <h1 class="ocr__title">OCR</h1>
+        </header>
 
+        <section class="ocr__output">
+            <label for="ocr-output" class="ocr__label">Extracted Text</label>
+            <img id="copy-icon" src="../../assets/images/Copy.png" alt="Copy to clipboard" class="clipboard-icon" />
+            <textarea id="ocr-output" class="ocr__textarea" readonly placeholder="Extracted text will appear here."></textarea>
+        </section>
+
+        <section class="ocr__controls">
+            <button id="start-ocr" class="ocr__button">Start Process</button>
+        </section>
+
+        <footer class="ocr__footer">
+            <p class="ocr__disclaimer">Text extraction powered by Gemini AI</p>
+        </footer>
+    </div>
+</main>
+<script src="OCR.js"></script>
 </body>
 </html>

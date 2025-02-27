@@ -21,18 +21,18 @@ const tools = [
         link: 'pages/Hex/Hex.html'
     },
     {
+        name: 'Snaps',
+        description: 'webpage screenshot tool',
+        image: 'assets/images/screenshot.png',
+        backgroundColor: '#FFB380',
+        link: 'pages/Screenshot/Screenshot.html'
+    },
+    {
         name: 'OCR',
         description: 'coming soon...',
         image: 'assets/images/ocr.png',
         backgroundColor: '#91D9F8',
-        link: ''
-    },
-    {
-        name: 'Snaps',
-        description: 'coming soon...',
-        image: 'assets/images/screenshot.png',
-        backgroundColor: '#FFB380',
-        link: 'pages/Screenshot/Screenshot.html'
+        link: 'pages/OCR/OCR.html'
     }
 
 ];
