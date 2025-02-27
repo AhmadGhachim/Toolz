@@ -32,7 +32,7 @@ const tools = [
         description: 'coming soon...',
         image: 'assets/images/screenshot.png',
         backgroundColor: '#FFB380',
-        link: ''
+        link: 'pages/Screenshot/Screenshot.html'
     }
 
 ];

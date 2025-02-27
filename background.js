@@ -1,3 +1,4 @@
+// Timer-related variables and functions
 let countdownInterval = null;
 let totalSeconds = 0;
 
@@ -24,7 +25,6 @@ function startCountdown(newSeconds = null) {
     }, 1000);
 }
 
-
 function pauseCountdown() {
     if (countdownInterval) {
         clearInterval(countdownInterval);
@@ -39,7 +39,7 @@ function resetCountdown() {
     chrome.storage.local.set({ totalSeconds });
 }
 
-
+// Timer message handlers
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     if (message.command === "start") {
         const newSeconds = message.totalSeconds || null;
@@ -59,3 +59,126 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     }
 });
 
+// Screenshot functionality
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+    if (message.action === 'captureArea') {
+        handleAreaCapture();
+        return true;
+    } else if (message.action === 'captureFullPage') {
+        handleFullPageCapture();
+        return true;
+    } else if (message.action === 'captureSelectedArea') {
+        handleSelectedAreaCapture(message.area);
+        return true;
+    }
+});
+
+function downloadScreenshot(dataUrl) {
+    const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+    const filename = `screenshot-${timestamp}.png`;
+
+    chrome.downloads.download({
+        url: dataUrl,
+        filename: filename,
+        saveAs: true
+    });
+}
+
+async function handleAreaCapture() {
+    try {
+        const [tab] = await chrome.tabs.query({active: true, currentWindow: true});
+        if (!tab) {
+            console.error('No active tab found');
+            return;
+        }
+
+        await chrome.scripting.executeScript({
+            target: { tabId: tab.id },
+            files: ['screenshotContent.js']
+        });
+
+        await chrome.tabs.sendMessage(tab.id, {
+            action: 'startSelection'
+        });
+
+    } catch (error) {
+        console.error('Error in area capture:', error);
+    }
+}
+
+async function handleFullPageCapture() {
+    try {
+        const [tab] = await chrome.tabs.query({active: true, currentWindow: true});
+        if (!tab) {
+            console.error('No active tab found');
+            return;
+        }
+
+        const capture = await chrome.tabs.captureVisibleTab(null, {
+            format: 'png'
+        });
+
+        downloadScreenshot(capture);
+
+    } catch (error) {
+        console.error('Error in full page capture:', error);
+    }
+}
+// In background.js
+async function handleSelectedAreaCapture(area) {
+    try {
+        const [tab] = await chrome.tabs.query({active: true, currentWindow: true});
+        if (!tab) {
+            console.error('No active tab found');
+            return;
+        }
+
+        // Remove the selection overlay before capturing
+        await chrome.tabs.sendMessage(tab.id, { action: 'removeSelection' });
+
+        // Small delay to ensure overlay is removed
+        await new Promise(resolve => setTimeout(resolve, 100));
+
+        // Capture the visible tab
+        const capture = await chrome.tabs.captureVisibleTab(null, {
+            format: 'png'
+        });
+
+        // Create offscreen document if it doesn't exist
+        try {
+            const existingContexts = await chrome.runtime.getContexts({
+                contextTypes: ['OFFSCREEN_DOCUMENT']
+            });
+
+            if (existingContexts.length === 0) {
+                await chrome.offscreen.createDocument({
+                    url: 'pages/Screenshot/offscreen.html',
+                    reasons: ['DOM_PARSER'],
+                    justification: 'Screenshot cropping'
+                });
+                // Small delay to ensure document is ready
+                await new Promise(resolve => setTimeout(resolve, 100));
+            }
+        } catch (e) {
+            console.error('Error creating offscreen document:', e);
+        }
+
+        // Send message to offscreen document to crop the image
+        chrome.runtime.sendMessage({
+            action: 'cropImage',
+            imageDataUrl: capture,
+            area: area
+        });
+
+    } catch (error) {
+        console.error('Error in selected area capture:', error);
+    }
+}
+
+// Add this new message listener in background.js
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+    if (message.action === 'downloadCroppedImage') {
+        downloadScreenshot(message.dataUrl);
+        return true;
+    }
+});

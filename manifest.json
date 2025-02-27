@@ -25,7 +25,8 @@
         "<all_urls>"
       ],
       "js": [
-        "hexPickerContent.js"
+        "hexPickerContent.js", "screenshotContent.js"
+
       ]
     }
   ],
@@ -33,7 +34,10 @@
     "activeTab",
     "scripting",
     "storage",
-    "clipboardWrite"
+    "clipboardWrite",
+    "desktopCapture",
+    "downloads",
+    "offscreen"
   ],
   "host_permissions": [
     "<all_urls>"

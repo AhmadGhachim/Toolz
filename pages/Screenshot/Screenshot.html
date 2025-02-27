@@ -2,9 +2,31 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Screenshot Tool</title>
+    <link rel="stylesheet" href="Screenshot.css">
 </head>
 <body>
+<main class="screenshot">
+    <div class="screenshot__container">
+        <header class="screenshot__header">
+            <a href="../../index.html" class="screenshot__back-button">←</a>
+            <h1 class="screenshot__title">Screenshot</h1>
+        </header>
 
+        <div class="screenshot__options">
+            <button class="screenshot__button screenshot__button--select">
+<!--                <img src="../assets/images/select.png" alt="Select area">-->
+                <span>Select Area</span>
+            </button>
+
+            <button class="screenshot__button screenshot__button--full">
+<!--                <img src="../assets/images/fullpage.png" alt="Full page">-->
+                <span>Full Page</span>
+            </button>
+        </div>
+
+    </div>
+</main>
+<script src="Screenshot.js"></script>
 </body>
 </html>
