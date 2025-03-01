@@ -25,22 +25,6 @@ chrome.runtime.onMessage.addListener((message, sender) => {
                         });
                     });
                 })
-                .catch(error => {
-                    if (error.name !== 'AbortError') {
-                        let errorMessage = "Failed to use color picker";
-
-                        if (error.name === 'NotAllowedError') {
-                            errorMessage = "This website doesn't allow color picking for security reasons";
-                        }
-
-                        console.error("EyeDropper error:", error.name, error.message);
-
-                        chrome.runtime.sendMessage({
-                            action: "picker_error",
-                            error: errorMessage
-                        });
-                    }
-                });
         }, 500);
     }
 });
