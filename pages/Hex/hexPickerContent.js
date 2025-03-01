@@ -26,22 +26,20 @@ chrome.runtime.onMessage.addListener((message, sender) => {
                     });
                 })
                 .catch(error => {
-                    let errorMessage = "Failed to use color picker";
+                    if (error.name !== 'AbortError') {
+                        let errorMessage = "Failed to use color picker";
 
-                    // Handle specific error cases
-                    if (error.name === 'NotAllowedError') {
-                        errorMessage = "This website doesn't allow color picking for security reasons";
-                    } else if (error.name === 'AbortError') {
-                        errorMessage = "Color picking was cancelled";
+                        if (error.name === 'NotAllowedError') {
+                            errorMessage = "This website doesn't allow color picking for security reasons";
+                        }
+
+                        console.error("EyeDropper error:", error.name, error.message);
+
+                        chrome.runtime.sendMessage({
+                            action: "picker_error",
+                            error: errorMessage
+                        });
                     }
-
-                    console.error("EyeDropper error:", errorMessage);
-
-                    // Send error message back to popup
-                    chrome.runtime.sendMessage({
-                        action: "picker_error",
-                        error: errorMessage
-                    });
                 });
         }, 500);
     }
