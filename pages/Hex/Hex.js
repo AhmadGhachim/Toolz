@@ -60,9 +60,8 @@ window.addEventListener("DOMContentLoaded", () => {
         });
     };
 
-    // "Pick Color" button click event
     pickColorButton.addEventListener("click", () => {
-        chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+        chrome.tabs.query({ active: true, currentWindow: true }, async (tabs) => {
             const activeTab = tabs[0];
 
             // Check if the current page is accessible
@@ -76,25 +75,31 @@ window.addEventListener("DOMContentLoaded", () => {
                 return;
             }
 
-
-            // Activate EyeDropper API and save the selected color
-            const eyeDropper = new EyeDropper();
-            eyeDropper.open()
-                .then((result) => {
-                    chrome.storage.local.get("color_hex_code", (data) => {
-                        const colors = data.color_hex_code || [];
-                        colors.push(result.sRGBHex);
-                        chrome.storage.local.set({ color_hex_code: colors }, () => {
-                            renderHexColors(); // Refresh color display
-                        });
-                    });
-
-                })
-                .catch(() => {
-                    showNotification("#ad5049", "Failed to pick color.");
+            try {
+                // First, ensure the content script is injected
+                await chrome.scripting.executeScript({
+                    target: { tabId: activeTab.id },
+                    files: ['pages/Hex/hexPickerContent.js']
                 });
 
+                // Notify background that color picker is being activated
+                chrome.runtime.sendMessage({
+                    from: "popup",
+                    query: "eye_dropper_clicked"
+                });
 
+                // Then send the message to content script
+                chrome.tabs.sendMessage(
+                    activeTab.id,
+                    { from: "popup", query: "eye_dropper_clicked" }
+                );
+
+                // Close the popup
+                window.close();
+            } catch (error) {
+                showNotification("#ad5049", "Failed to initialize color picker.");
+                console.error(error);
+            }
         });
     });
 

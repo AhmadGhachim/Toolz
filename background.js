@@ -182,3 +182,29 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
         return true;
     }
 });
+
+
+// Add this to your background.js
+let isColorPickerActive = false;
+
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+    if (message.action === "reopen_popup") {
+        if (isColorPickerActive) {
+            chrome.action.setPopup({ popup: message.path }, () => {
+                chrome.action.openPopup();
+                // Reset the flag and popup path after a short delay
+                setTimeout(() => {
+                    isColorPickerActive = false;
+                    chrome.action.setPopup({ popup: 'index.html' });
+                }, 1000);
+            });
+        }
+    }
+});
+
+// Add this listener for when the color picker is activated
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+    if (message.from === "popup" && message.query === "eye_dropper_clicked") {
+        isColorPickerActive = true;
+    }
+});

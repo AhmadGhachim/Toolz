@@ -29,7 +29,7 @@ const tools = [
     },
     {
         name: 'Snaps',
-        description: 'coming soon...',
+        description: 'A wepage screenshot tool.',
         image: 'assets/images/screenshot.png',
         backgroundColor: '#FFB380',
         link: 'pages/Screenshot/Screenshot.html'

@@ -18,6 +18,11 @@ chrome.runtime.onMessage.addListener((message, sender) => {
 
                         chrome.storage.local.set({ color_hex_code: savedColors }, () => {
                             console.log("Color saved:", result.sRGBHex);
+                            // After saving the color, send message to reopen popup
+                            chrome.runtime.sendMessage({
+                                action: "reopen_popup",
+                                path: "pages/Hex/Hex.html"
+                            });
                         });
                     });
                 })
@@ -27,4 +32,3 @@ chrome.runtime.onMessage.addListener((message, sender) => {
         }, 500);
     }
 });
-
