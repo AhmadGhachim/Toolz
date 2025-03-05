@@ -1,103 +1,91 @@
-# Toolz: The All-in-One Chrome Extension
+# Toolz - Chrome Productivity Extension
 
-![Logo](https://github.com/user-attachments/assets/3aa80510-eccc-4269-af6b-23b4e5f1fa20)
+![logo](https://github.com/user-attachments/assets/fdb1c1df-f472-46d9-9fa0-11f49b7c40ec)
 
-## Load Chrome Extension (Dev Mode)
+Toolz is a comprehensive Chrome extension that brings together essential productivity tools in one convenient package. Whether you need to set timers, summarize content, or pick colors, Toolz has got you covered.
 
-1.  **Clone Repo:**
-    ```bash
-    git clone https://github.com/AhmadGhachim/Toolz.git
-    ```
-
-2.  **Chrome Extensions Page:**
-    *   Open Chrome, go to `chrome://extensions/`
-    *   Enable "Developer mode" (top right).
-
-3.  **Load Unpacked:**
-    *   Click "Load unpacked" (top left).
-    *   Select your cloned extension folder.
-
-4.  **Done!** Extension is loaded. Refresh extension page after code changes.
-
-## Overview
-**Toolz** is a versatile Chrome extension designed to eliminate the need for multiple browser extensions by offering a suite of essential utilities in one package. Each tool is represented by a unique, pixelated character that enhances the user experience, making interactions more engaging and intuitive.
-
-## Problem
-Users often find themselves installing multiple Chrome extensions to handle everyday tasks such as extracting text from images, summarizing web pages, taking screenshots, managing time, and identifying colors. This results in:
-- Browser clutter and decreased performance
-- Inconsistent UI/UX across different extensions
-- Security risks from installing multiple third-party extensions
-
-Toolz solves these issues by bundling essential tools into a single, user-friendly extension with a consistent design language and fun character themes.
-
-## User Profile
-**Primary Users:**
-- Students who frequently take notes from images and summarize articles
-- Professionals who need quick screenshots and time management tools
-- Designers and developers looking for accurate color identification
-- General internet users seeking an all-in-one browser assistant
+Chrome Web Store link: https://chromewebstore.google.com/detail/fdjdcmfdhllmllkofddfanglebngpalm?utm_source=item-share-cb
 
 ## Features
-- **OCR Tool**: Select an image area to extract text and copy it to the clipboard
-- **Webpage Summarizer**: Uses AI to scan and summarize webpage content
-- **Screenshot Tool**: Capture full-page or selected areas with rectangle selection
-- **Timer**: A simple countdown timer with pause/resume functionality
-- **Hex Color Finder**: Detect and copy pixel color values when hovering over images
-- **Pixelated-Themed Assistants (Bonus)**: Each tool is represented by a unique, friendly character
 
-## Implementation
-### **Tech Stack**
-- **Frontend:** HTML, CSS (Sass), JavaScript (Vanilla); React for the Tool Webpage
-- **Backend:** Node.js, Express
-- **APIs:** OCR API, Gemini API
-- **Storage:** Local Storage for settings and session data
+### 🕒 Timer
+- Set custom countdown timers
+- Pause and resume functionality
+- Visual notifications
+- Persists across browser sessions
 
-### **Extension Permissions**
-- `ActiveTab`: To interact with user-selected elements
-- `Storage`: To save user preferences and settings
-- `ClipboardWrite`: For copying extracted text
-- `Screenshots`: For capturing and saving images
+### 🤖 AI Summary
+- Summarize any webpage content using Gemini AI
+- One-click summarization
+- Copy summary to clipboard
+- Clear, concise summaries of long articles
 
-## Roadmap
-### **Phase 1: Core Development**
-- Set up Chrome extension boilerplate
-- Implement basic UI and settings page
-- Develop OCR tool and clipboard integration
-- Implement screenshot tool with rectangle selection
+### 🎨 Hex Finder
+- Extract color codes from any webpage
+- Click to copy hex values
+- Real-time color preview
 
-### **Phase 2: Feature Expansion**
-- Integrate AI summarization using external APIs
-- Implement timer with UI interactions
-- Develop hex color finder tool
-- Enhance UI with cartoony character designs
+### 🔜 Coming Soon
+- OCR (Optical Character Recognition)
+- Screenshot Tool (Snaps)
 
-### **Phase 3: Optimization & Deployment**
-- Conduct UX testing and gather feedback
-- Optimize performance and reduce memory usage
-- Publish on Chrome Web Store
-- Market extension via forums, social media, and tech blogs
+## Installation
 
-## Proof of Concept
-For this proposal, I created a proof-of-concept Chrome extension featuring a timer with additional functionality to create an API request to Gemini to retrieve a random timer value.
+### From Chrome Web Store
+link: https://chromewebstore.google.com/detail/fdjdcmfdhllmllkofddfanglebngpalm?utm_source=item-share-cb
 
-![image](https://github.com/user-attachments/assets/d40f352f-70bc-4a4c-b972-2715e979fc28)
+### Local Development Installation
+1. Clone this repository:
+```bash
+git clone https://github.com/yourusername/toolz.git
+```
+2. Create a `config.js` file from the template:
+```bash
+cp config.template.js config.js
+```
+3. Add your Gemini API key to `config.js`
+4. Watch SCSS to apply styling.
+5. Open Chrome and navigate to `chrome://extensions/`
+6. Enable "Developer mode" in the top right
+7. Click "Load unpacked" and select the project directory
 
-## Mockups
-The mockups below are not finalized and will change.
-![HomePage](https://github.com/user-attachments/assets/bb584259-01fd-4ab4-9e6d-0a6ef59ba614)
-![OCR](https://github.com/user-attachments/assets/0822a624-4149-42bf-b4d0-7ad97829f613)
-![Summarizer](https://github.com/user-attachments/assets/88861842-9292-4f99-b3ee-e2568e94c0e4)
-![Screenshot](https://github.com/user-attachments/assets/6193f5ec-8dda-472e-8334-c5e0c6ff15d0)
-![Hex](https://github.com/user-attachments/assets/a865ca4a-3503-4789-b20a-33769bd595a3)
-![Timer](https://github.com/user-attachments/assets/39952f1e-a588-4a3b-82aa-62c8c18216e3)
+## Setup
 
-## Pixelated Characters Concept
-AI-generated concept characters.
-![Gemini_Generated_Image_f4aok5f4aok5f4ao](https://github.com/user-attachments/assets/47c582c1-10dd-450c-b71f-3679cb5e1b5f)
-![Gemini_Generated_Image_dy86o8dy86o8dy86](https://github.com/user-attachments/assets/2b4f402c-b12d-4a43-9b73-f7b660ce1d2a)
-![Gemini_Generated_Image_2jcj7w2jcj7w2jcj](https://github.com/user-attachments/assets/0b020bdd-cb73-45ec-9f7e-2d736f4d4409)
-![Gemini_Generated_Image_dc40pxdc40pxdc40](https://github.com/user-attachments/assets/1985b848-2b2f-4f46-bc37-36e5eca1b011)
-![Gemini_Generated_Image_nmc2ajnmc2ajnmc2](https://github.com/user-attachments/assets/4f6be893-4b40-447b-9e79-9249d110b1a3)
+### API Key Configuration
+1. Get your API key from [Google AI Studio](https://makersuite.google.com/app/apikey)
+2. Copy `config.template.js` to `config.js`
+3. Replace `YOUR_API_KEY_HERE` with your actual Gemini API key
 
-## Conclusion
-Toolz aims to streamline the browsing experience by providing a collection of powerful tools under one extension. With a fun, cartoony aesthetic and an intuitive interface, Toolz will become the ultimate browser assistant for everyday users.
+## Usage
+
+### Timer
+1. Click the Toolz icon in your Chrome toolbar
+2. Select the Timer tool
+3. Enter minutes and seconds
+4. Use Play, Pause, and Reset controls as needed
+
+### AI Summary
+1. Navigate to any webpage you want to summarize
+2. Click the Toolz icon
+3. Select AI Summary
+4. Click "Summarize Page"
+5. Use the copy icon to copy the summary
+
+### Hex Finder
+1. Select the Hex Finder tool
+2. Click anywhere on the page to get the color code
+3. Color codes are automatically copied to clipboard
+
+## Technical Requirements
+- Chrome Browser (Version 88 or higher)
+- Active internet connection for AI summarization
+- Gemini API key for summarization feature
+
+## Privacy
+- No user data is collected or stored
+- API keys are stored locally in Chrome storage
+- Summarization requests are made directly to Google's Gemini API
+
+
+## Support
+For support, please open an issue in the GitHub repository 
