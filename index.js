@@ -25,7 +25,7 @@ const tools = [
         description: 'coming soon...',
         image: 'assets/images/ocr.png',
         backgroundColor: '#91D9F8',
-        link: ''
+        link: 'pages/OCR/OCR.html'
     },
     {
         name: 'Snaps',

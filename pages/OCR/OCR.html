@@ -2,9 +2,37 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>OCR Tool</title>
+    <link rel="stylesheet" href="OCR.css">
 </head>
 <body>
+<main class="ocr">
+    <div class="ocr__container">
+        <header class="ocr__header">
+            <a href="../../index.html" class="ocr__back-button">←</a>
+            <h1 class="ocr__title">OCR</h1>
+        </header>
 
+        <div class="ocr__options">
+            <button class="ocr__button ocr__button--capture">
+                <span>Capture Screen</span>
+            </button>
+
+            <button class="ocr__button ocr__button--upload">
+                <span>Upload Image</span>
+            </button>
+        </div>
+
+        <div class="ocr__result hidden">
+            <textarea class="ocr__text" readonly></textarea>
+            <div class="ocr__actions">
+                <button class="ocr__action-button ocr__action-button--copy">Copy Text</button>
+                <button class="ocr__action-button ocr__action-button--clear">Clear</button>
+            </div>
+        </div>
+    </div>
+</main>
+<script src="https://unpkg.com/tesseract.js@v4.1.1/dist/tesseract.min.js"></script>
+<script src="OCR.js"></script>
 </body>
 </html>

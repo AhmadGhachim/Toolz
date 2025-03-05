@@ -208,3 +208,45 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
         isColorPickerActive = true;
     }
 });
+
+// Add to your existing background.js
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+    if (message.action === 'captureForOCR') {
+        handleOCRCapture();
+        return true;
+    }
+});
+
+async function handleOCRCapture() {
+    try {
+        const [tab] = await chrome.tabs.query({active: true, currentWindow: true});
+        if (!tab) {
+            console.error('No active tab found');
+            return;
+        }
+
+        const capture = await chrome.tabs.captureVisibleTab(null, {
+            format: 'png'
+        });
+
+        // Open OCR result page
+        chrome.tabs.create({
+            url: 'pages/OCR/OCR.html'
+        }, (newTab) => {
+            // Wait for the page to load
+            chrome.tabs.onUpdated.addListener(function listener(tabId, info) {
+                if (tabId === newTab.id && info.status === 'complete') {
+                    chrome.tabs.onUpdated.removeListener(listener);
+                    // Send the captured image to the OCR page
+                    chrome.tabs.sendMessage(newTab.id, {
+                        action: 'processCapture',
+                        imageData: capture
+                    });
+                }
+            });
+        });
+
+    } catch (error) {
+        console.error('Error in OCR capture:', error);
+    }
+}
