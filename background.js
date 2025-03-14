@@ -1,4 +1,3 @@
-// Timer-related variables and functions
 let countdownInterval = null;
 let totalSeconds = 0;
 
@@ -39,7 +38,7 @@ function resetCountdown() {
     chrome.storage.local.set({ totalSeconds });
 }
 
-// Timer message handlers
+
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     if (message.command === "start") {
         const newSeconds = message.totalSeconds || null;
@@ -124,7 +123,7 @@ async function handleFullPageCapture() {
         console.error('Error in full page capture:', error);
     }
 }
-// In background.js
+
 async function handleSelectedAreaCapture(area) {
     try {
         const [tab] = await chrome.tabs.query({active: true, currentWindow: true});
@@ -133,18 +132,14 @@ async function handleSelectedAreaCapture(area) {
             return;
         }
 
-        // Remove the selection overlay before capturing
         await chrome.tabs.sendMessage(tab.id, { action: 'removeSelection' });
 
-        // Small delay to ensure overlay is removed
         await new Promise(resolve => setTimeout(resolve, 100));
 
-        // Capture the visible tab
         const capture = await chrome.tabs.captureVisibleTab(null, {
             format: 'png'
         });
 
-        // Create offscreen document if it doesn't exist
         try {
             const existingContexts = await chrome.runtime.getContexts({
                 contextTypes: ['OFFSCREEN_DOCUMENT']
@@ -175,7 +170,6 @@ async function handleSelectedAreaCapture(area) {
     }
 }
 
-// Add this new message listener in background.js
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     if (message.action === 'downloadCroppedImage') {
         downloadScreenshot(message.dataUrl);
@@ -184,7 +178,6 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 });
 
 
-// Add this to your background.js
 let isColorPickerActive = false;
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
@@ -192,7 +185,6 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
         if (isColorPickerActive) {
             chrome.action.setPopup({ popup: message.path }, () => {
                 chrome.action.openPopup();
-                // Reset the flag and popup path after a short delay
                 setTimeout(() => {
                     isColorPickerActive = false;
                     chrome.action.setPopup({ popup: 'index.html' });
@@ -202,7 +194,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     }
 });
 
-// Add this listener for when the color picker is activated
+
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     if (message.from === "popup" && message.query === "eye_dropper_clicked") {
         isColorPickerActive = true;

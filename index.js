@@ -22,10 +22,10 @@ const tools = [
     },
     {
         name: 'OCR',
-        description: 'coming soon...',
+        description: 'Image to text extraction.',
         image: 'assets/images/ocr.png',
         backgroundColor: '#91D9F8',
-        link: ''
+        link: 'pages/OCR/OCR.html'
     },
     {
         name: 'Snaps',
