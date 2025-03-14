@@ -1,3 +1,6 @@
+import config from '../../config.js';
+
+
 const summarizeButton = document.getElementById("summarize-button");
 const summaryOutput = document.getElementById("summary-output");
 
@@ -90,7 +93,7 @@ async function extractArticleContent() {
  * Incorporates the "generationConfig" for more control.
  */
 async function fetchSummary(articleContent) {
-    const API_KEY = "AIzaSyChmbtA0ZpyDhoRXXOTeU9r7L5f7tRBU5Q";
+    const API_KEY = config.API_KEY;
     const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
     const geminiPrompt = "Summarize the content of the following text in a clear, coherent, and concise manner. Capture the essential points, key arguments, and any actionable insights in 3-5 sentences. Use plain, natural language with a neutral, professional tone, and ensure the summary flows logically without unnecessary details.";
 
@@ -137,7 +140,6 @@ async function fetchSummary(articleContent) {
 /**
  * Handles the "Summarize Page" button click event.
  * Extracts content, sends it to the API, and displays the summary.
- * Includes robust error handling for all stages.
  */
 summarizeButton.addEventListener("click", async () => {
     summaryOutput.value = "Extracting content...";
