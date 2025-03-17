@@ -18,33 +18,12 @@ class OCRProcessor {
 
         this.fileInput.addEventListener('change', (e) => this.handleFileSelect(e));
 
-
-        this.dropZone.addEventListener('dragover', (e) => {
-            e.preventDefault();
-            this.dropZone.style.borderColor = '#72C2E0';
-        });
-
-        this.dropZone.addEventListener('dragleave', () => {
-            this.dropZone.style.borderColor = '';
-        });
-
-        this.dropZone.addEventListener('drop', (e) => {
-            e.preventDefault();
-            this.dropZone.style.borderColor = '';
-            const file = e.dataTransfer.files[0];
-            if (file && file.type.startsWith('image/')) {
-                this.handleFile(file);
-            }
-        });
-
-
         this.dropZone.addEventListener('click', () => {
             this.fileInput.click();
         });
 
 
         this.extractButton.addEventListener('click', () => this.extractText());
-
 
         this.copyIcon.addEventListener('click', () => this.copyToClipboard());
     }
