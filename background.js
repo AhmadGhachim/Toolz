@@ -93,7 +93,7 @@ async function handleAreaCapture() {
 
         await chrome.scripting.executeScript({
             target: { tabId: tab.id },
-            files: ['screenshotContent.js']
+            files: ['pages/Screenshot/screenshotContent.js']
         });
 
         await chrome.tabs.sendMessage(tab.id, {
