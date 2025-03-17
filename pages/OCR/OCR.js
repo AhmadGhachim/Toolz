@@ -8,16 +8,17 @@ class OCRProcessor {
         this.extractButton = document.getElementById('extract-button');
         this.outputText = document.getElementById('extracted-text');
         this.copyIcon = document.getElementById('copy-icon');
+        this.uploadContent = document.querySelector('.ocr__upload-content');
         this.currentFile = null;
 
         this.initializeEventListeners();
     }
 
-    initializeEventListeners() {
-        // File input change
+        initializeEventListeners() {
+
         this.fileInput.addEventListener('change', (e) => this.handleFileSelect(e));
 
-        // Drag and drop
+
         this.dropZone.addEventListener('dragover', (e) => {
             e.preventDefault();
             this.dropZone.style.borderColor = '#72C2E0';
@@ -36,15 +37,15 @@ class OCRProcessor {
             }
         });
 
-        // Click to upload
+
         this.dropZone.addEventListener('click', () => {
             this.fileInput.click();
         });
 
-        // Extract text
+
         this.extractButton.addEventListener('click', () => this.extractText());
 
-        // Copy text
+
         this.copyIcon.addEventListener('click', () => this.copyToClipboard());
     }
 
@@ -60,8 +61,14 @@ class OCRProcessor {
             this.currentFile = file;
             this.extractButton.disabled = false;
             this.outputText.value = '';
+
+            this.uploadContent.innerHTML = `
+                <p style="color: #72C2E0;">✓ ${file.name}</p>
+                <p style="font-size: 0.8rem;">Click to upload a different image</p>
+            `;
         }
     }
+
 
     async extractText() {
         if (!this.currentFile) return;
@@ -105,7 +112,7 @@ class OCRProcessor {
     }
 }
 
-// Initialize the OCR processor when the document is loaded
+
 document.addEventListener('DOMContentLoaded', () => {
     new OCRProcessor();
 });
