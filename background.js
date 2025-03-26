@@ -81,28 +81,40 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     }
 });
 
-// Add to background.js
+
+
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     if (message.action === "captureVisibleTab" && message.from === "screenshot") {
-        console.log('Processing capture request:', message.source);
-
-        // For test messages, respond immediately
-        if (message.source === "test") {
-            sendResponse(true);
-            return true;
-        }
-
-        // Capture the tab
-        chrome.tabs.captureVisibleTab(null, {format: 'png'}, (dataUrl) => {
+        chrome.tabs.captureVisibleTab(null, { format: "png" }, dataUrl => {
             if (chrome.runtime.lastError) {
-                console.error('Capture error:', chrome.runtime.lastError);
+                console.error(chrome.runtime.lastError);
                 sendResponse(null);
             } else {
-                console.log('Capture successful');
-                activeScreenshotTab = sender.tab?.id || null;
                 sendResponse(dataUrl);
             }
         });
-        return true; // Will respond asynchronously
+        return true;
+    }
+
+    if (message.action === "screenshotCompleted") {
+        console.log('Screenshot completed, preparing download...');
+        try {
+            chrome.downloads.download({
+                url: message.dataUrl,
+                filename: `scrolling-screenshot-${message.timestamp}.png`,
+                saveAs: false
+            }, downloadId => {
+                if (chrome.runtime.lastError) {
+                    console.error('Download error:', chrome.runtime.lastError);
+                    sendResponse({status: 'error', error: chrome.runtime.lastError});
+                } else {
+                    sendResponse({status: 'success', downloadId});
+                }
+            });
+        } catch (error) {
+            console.error('Screenshot download error:', error);
+            sendResponse({status: 'error', error: error.message});
+        }
+        return true;
     }
 });
