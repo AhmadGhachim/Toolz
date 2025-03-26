@@ -1,141 +1,75 @@
-console.log('Screenshot content script loaded');
+(async function captureScrollingScreenshot() {
+    try {
+        const canvas = document.createElement("canvas");
+        const ctx = canvas.getContext("2d");
+        const body = document.body;
+        const html = document.documentElement;
 
-class ScreenshotSelector {
-    constructor() {
-        this.isSelecting = false;
-        this.startX = 0;
-        this.startY = 0;
-        this.currentX = 0;
-        this.currentY = 0;
-        this.selectionBox = null;
-        this.overlay = null;
+        const totalHeight = Math.max(
+            body.scrollHeight,
+            body.offsetHeight,
+            html.clientHeight,
+            html.scrollHeight,
+            html.offsetHeight
+        );
+        const viewportHeight = window.innerHeight;
 
-        this.handleMouseDown = this.handleMouseDown.bind(this);
-        this.handleMouseMove = this.handleMouseMove.bind(this);
-        this.handleMouseUp = this.handleMouseUp.bind(this);
-    }
+        canvas.width = window.innerWidth; // Match viewport width
+        canvas.height = totalHeight; // Match total document height
 
-    initialize() {
-        this.overlay = document.createElement('div');
-        this.overlay.style.cssText = `
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.3);
-            cursor: crosshair;
-            z-index: 999999;
-        `;
+        let scrollTop = 0;
+        let isFinalScroll = false;
 
-        this.selectionBox = document.createElement('div');
-        this.selectionBox.style.cssText = `
-            position: fixed;
-            border: 2px solid #ffffff;
-            background: rgba(0, 123, 255, 0.1);
-            pointer-events: none;
-            z-index: 1000000;
-        `;
+        while (!isFinalScroll) {
+            // Calculate if the current scroll is the last one
+            isFinalScroll = totalHeight - scrollTop <= viewportHeight;
 
-        document.body.appendChild(this.overlay);
-        document.body.appendChild(this.selectionBox);
+            // Scroll to the current position
+            window.scrollTo(0, scrollTop);
+            await new Promise((resolve) => setTimeout(resolve, 500)); // Ensure content is rendered
 
-        this.overlay.addEventListener('mousedown', this.handleMouseDown);
-        document.addEventListener('mousemove', this.handleMouseMove);
-        document.addEventListener('mouseup', this.handleMouseUp);
+            // Capture the visible viewport
+            const dataUrl = await new Promise((resolve) =>
+                chrome.runtime.sendMessage({ action: "captureVisibleTab" }, resolve)
+            );
 
-        document.body.style.userSelect = 'none';
-    }
+            if (!dataUrl) throw new Error("Failed to capture visible tab");
 
-    handleMouseDown(e) {
-        this.isSelecting = true;
-        this.startX = e.clientX;
-        this.startY = e.clientY;
-        this.updateSelectionBox();
-    }
+            // Draw the captured viewport onto the canvas at the correct position
+            const img = new Image();
+            img.src = dataUrl;
 
-    handleMouseMove(e) {
-        if (!this.isSelecting) return;
-
-        this.currentX = e.clientX;
-        this.currentY = e.clientY;
-        this.updateSelectionBox();
-    }
-
-    async handleMouseUp() {
-        if (!this.isSelecting) return;
-        this.isSelecting = false;
-
-        // Get scroll position
-        const scrollX = window.scrollX;
-        const scrollY = window.scrollY;
-
-        // Get device pixel ratio
-        const devicePixelRatio = window.devicePixelRatio;
-
-        const x = Math.min(this.startX, this.currentX);
-        const y = Math.min(this.startY, this.currentY);
-        const width = Math.abs(this.currentX - this.startX);
-        const height = Math.abs(this.currentY - this.startY);
-
-        try {
-            this.selectionBox.style.display = 'none';
-            this.overlay.style.display = 'none';
-
-            chrome.runtime.sendMessage({
-                action: 'captureSelectedArea',
-                area: {
-                    x: (x + scrollX) * devicePixelRatio,
-                    y: (y + scrollY) * devicePixelRatio,
-                    width: width * devicePixelRatio,
-                    height: height * devicePixelRatio,
-                    devicePixelRatio
-                }
+            await new Promise((resolve, reject) => {
+                img.onload = () => {
+                    ctx.drawImage(img, 0, scrollTop);
+                    resolve();
+                };
+                img.onerror = () => reject(new Error("Failed to load captured image"));
             });
-        } catch (error) {
-            console.error('Error requesting screenshot capture:', error);
+
+            // Increment scroll position
+            scrollTop += viewportHeight;
         }
 
-        this.cleanup();
+        window.scrollTo(0, 0); // Reset scroll position to the top of the page
+
+        // Export the canvas as an image
+        const blobPromise = new Promise((resolve) => {
+            canvas.toBlob((blob) => resolve(blob));
+        });
+
+        const blob = await blobPromise;
+        if (!blob) throw new Error("Failed to export canvas as an image");
+
+        // Trigger download only once
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = `scrolling-screenshot-${Date.now()}.png`;
+        link.click();
+        URL.revokeObjectURL(url);
+    } catch (error) {
+        // Communicate errors to the user
+        chrome.runtime.sendMessage({ action: "handleError", message: error.message });
     }
-
-    updateSelectionBox() {
-        const x = Math.min(this.startX, this.currentX);
-        const y = Math.min(this.startY, this.currentY);
-        const width = Math.abs(this.currentX - this.startX);
-        const height = Math.abs(this.currentY - this.startY);
-
-        this.selectionBox.style.left = x + 'px';
-        this.selectionBox.style.top = y + 'px';
-        this.selectionBox.style.width = width + 'px';
-        this.selectionBox.style.height = height + 'px';
-        this.selectionBox.style.display = 'block';
-    }
-
-    cleanup() {
-        if (this.overlay) this.overlay.remove();
-        if (this.selectionBox) this.selectionBox.remove();
-        document.removeEventListener('mousemove', this.handleMouseMove);
-        document.removeEventListener('mouseup', this.handleMouseUp);
-        document.body.style.userSelect = '';
-    }
-}
-
-chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-    if (message.action === 'startSelection') {
-        console.log('Starting selection process');
-        const selector = new ScreenshotSelector();
-        selector.initialize();
-        sendResponse({ status: 'selection_started' });
-        return true;
-    } else if (message.action === 'removeSelection') {
-        const overlay = document.querySelector('div[style*="position: fixed"][style*="background: rgba(0, 0, 0, 0.3)"]');
-        const selectionBox = document.querySelector('div[style*="position: fixed"][style*="border: 2px solid #ffffff"]');
-
-        if (overlay) overlay.remove();
-        if (selectionBox) selectionBox.remove();
-
-        sendResponse({ status: 'selection_removed' });
-        return true;
-    }
-});
+})();

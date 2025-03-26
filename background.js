@@ -58,126 +58,6 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     }
 });
 
-// Screenshot functionality
-chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-    if (message.action === 'captureArea') {
-        handleAreaCapture();
-        return true;
-    } else if (message.action === 'captureFullPage') {
-        handleFullPageCapture();
-        return true;
-    } else if (message.action === 'captureSelectedArea') {
-        handleSelectedAreaCapture(message.area);
-        return true;
-    }
-});
-
-function downloadScreenshot(dataUrl) {
-    const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
-    const filename = `screenshot-${timestamp}.png`;
-
-    chrome.downloads.download({
-        url: dataUrl,
-        filename: filename,
-        saveAs: true
-    });
-}
-
-async function handleAreaCapture() {
-    try {
-        const [tab] = await chrome.tabs.query({active: true, currentWindow: true});
-        if (!tab) {
-            console.error('No active tab found');
-            return;
-        }
-
-        await chrome.scripting.executeScript({
-            target: { tabId: tab.id },
-            files: ['pages/Screenshot/screenshotContent.js']
-        });
-
-        await chrome.tabs.sendMessage(tab.id, {
-            action: 'startSelection'
-        });
-
-    } catch (error) {
-        console.error('Error in area capture:', error);
-    }
-}
-
-async function handleFullPageCapture() {
-    try {
-        const [tab] = await chrome.tabs.query({active: true, currentWindow: true});
-        if (!tab) {
-            console.error('No active tab found');
-            return;
-        }
-
-        const capture = await chrome.tabs.captureVisibleTab(null, {
-            format: 'png'
-        });
-
-        downloadScreenshot(capture);
-
-    } catch (error) {
-        console.error('Error in full page capture:', error);
-    }
-}
-
-async function handleSelectedAreaCapture(area) {
-    try {
-        const [tab] = await chrome.tabs.query({active: true, currentWindow: true});
-        if (!tab) {
-            console.error('No active tab found');
-            return;
-        }
-
-        await chrome.tabs.sendMessage(tab.id, { action: 'removeSelection' });
-
-        await new Promise(resolve => setTimeout(resolve, 100));
-
-        const capture = await chrome.tabs.captureVisibleTab(null, {
-            format: 'png'
-        });
-
-        try {
-            const existingContexts = await chrome.runtime.getContexts({
-                contextTypes: ['OFFSCREEN_DOCUMENT']
-            });
-
-            if (existingContexts.length === 0) {
-                await chrome.offscreen.createDocument({
-                    url: 'pages/Screenshot/offscreen.html',
-                    reasons: ['DOM_PARSER'],
-                    justification: 'Screenshot cropping'
-                });
-                // Small delay to ensure document is ready
-                await new Promise(resolve => setTimeout(resolve, 100));
-            }
-        } catch (e) {
-            console.error('Error creating offscreen document:', e);
-        }
-
-        // Send message to offscreen document to crop the image
-        chrome.runtime.sendMessage({
-            action: 'cropImage',
-            imageDataUrl: capture,
-            area: area
-        });
-
-    } catch (error) {
-        console.error('Error in selected area capture:', error);
-    }
-}
-
-chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-    if (message.action === 'downloadCroppedImage') {
-        downloadScreenshot(message.dataUrl);
-        return true;
-    }
-});
-
-
 let isColorPickerActive = false;
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
@@ -198,5 +78,21 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     if (message.from === "popup" && message.query === "eye_dropper_clicked") {
         isColorPickerActive = true;
+    }
+});
+
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+    if (message.action === "captureVisibleTab") {
+        chrome.tabs.captureVisibleTab((dataUrl) => {
+            if (chrome.runtime.lastError || !dataUrl) {
+                sendResponse(null);
+            } else {
+                sendResponse(dataUrl);
+            }
+        });
+        return true; // Indicates a response will be sent asynchronously
+    } else if (message.action === "handleError") {
+        // Error handling (if needed for backend logic)
+        console.error("Error from content script:", message.message);
     }
 });
