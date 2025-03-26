@@ -1,75 +1,137 @@
-(async function captureScrollingScreenshot() {
-    try {
-        const canvas = document.createElement("canvas");
-        const ctx = canvas.getContext("2d");
-        const body = document.body;
-        const html = document.documentElement;
-
-        const totalHeight = Math.max(
-            body.scrollHeight,
-            body.offsetHeight,
-            html.clientHeight,
-            html.scrollHeight,
-            html.offsetHeight
-        );
-        const viewportHeight = window.innerHeight;
-
-        canvas.width = window.innerWidth; // Match viewport width
-        canvas.height = totalHeight; // Match total document height
-
-        let scrollTop = 0;
-        let isFinalScroll = false;
-
-        while (!isFinalScroll) {
-            // Calculate if the current scroll is the last one
-            isFinalScroll = totalHeight - scrollTop <= viewportHeight;
-
-            // Scroll to the current position
-            window.scrollTo(0, scrollTop);
-            await new Promise((resolve) => setTimeout(resolve, 500)); // Ensure content is rendered
-
-            // Capture the visible viewport
-            const dataUrl = await new Promise((resolve) =>
-                chrome.runtime.sendMessage({ action: "captureVisibleTab" }, resolve)
-            );
-
-            if (!dataUrl) throw new Error("Failed to capture visible tab");
-
-            // Draw the captured viewport onto the canvas at the correct position
-            const img = new Image();
-            img.src = dataUrl;
-
-            await new Promise((resolve, reject) => {
-                img.onload = () => {
-                    ctx.drawImage(img, 0, scrollTop);
-                    resolve();
-                };
-                img.onerror = () => reject(new Error("Failed to load captured image"));
-            });
-
-            // Increment scroll position
-            scrollTop += viewportHeight;
+// screenshotContent.js
+(function() {
+    class ScreenshotManager {
+        constructor() {
+            this.originalStyles = new Map();
+            this.canvas = null;
+            this.ctx = null;
         }
 
-        window.scrollTo(0, 0); // Reset scroll position to the top of the page
+        handleStickyElements() {
+            // Store and modify sticky/fixed elements
+            const elements = document.querySelectorAll('*');
 
-        // Export the canvas as an image
-        const blobPromise = new Promise((resolve) => {
-            canvas.toBlob((blob) => resolve(blob));
-        });
+            elements.forEach(el => {
+                const style = window.getComputedStyle(el);
+                if (style.position === 'fixed' || style.position === 'sticky') {
+                    this.originalStyles.set(el, {
+                        position: el.style.position,
+                        top: el.style.top,
+                        zIndex: el.style.zIndex
+                    });
 
-        const blob = await blobPromise;
-        if (!blob) throw new Error("Failed to export canvas as an image");
+                    // Convert to absolute positioning during capture
+                    el.style.position = 'absolute';
+                    el.style.top = style.top;
+                    el.style.zIndex = '1';
+                }
+            });
+        }
 
-        // Trigger download only once
-        const url = URL.createObjectURL(blob);
-        const link = document.createElement("a");
-        link.href = url;
-        link.download = `scrolling-screenshot-${Date.now()}.png`;
-        link.click();
-        URL.revokeObjectURL(url);
-    } catch (error) {
-        // Communicate errors to the user
-        chrome.runtime.sendMessage({ action: "handleError", message: error.message });
+        restoreStickyElements() {
+            // Restore original styles
+            this.originalStyles.forEach((styles, element) => {
+                element.style.position = styles.position;
+                element.style.top = styles.top;
+                element.style.zIndex = styles.zIndex;
+            });
+            this.originalStyles.clear();
+        }
+
+        setupCanvas() {
+            const viewportWidth = window.innerWidth;
+            const totalHeight = Math.max(
+                document.documentElement.scrollHeight,
+                document.documentElement.offsetHeight,
+                document.body.scrollHeight,
+                document.body.offsetHeight
+            );
+
+            this.canvas = document.createElement('canvas');
+            this.ctx = this.canvas.getContext('2d');
+            this.canvas.width = viewportWidth;
+            this.canvas.height = totalHeight;
+        }
+
+        async captureFullPage() {
+            try {
+                // 1. Setup phase
+                this.setupCanvas();
+                this.handleStickyElements();
+
+                // 2. Capture phase
+                const viewportHeight = window.innerHeight;
+                let capturedHeight = 0;
+                const scrollStep = Math.floor(viewportHeight * 0.95); // 95% overlap for smooth transition
+
+                // Store original scroll position
+                const originalScroll = window.scrollY;
+
+                while (capturedHeight < this.canvas.height) {
+                    // Scroll to position
+                    window.scrollTo(0, capturedHeight);
+
+                    // Wait for scroll and repaint
+                    await new Promise(resolve => setTimeout(resolve, 150));
+
+                    // Capture current viewport
+                    const dataUrl = await new Promise(resolve => {
+                        chrome.runtime.sendMessage(
+                            { action: "captureVisibleTab", from: "screenshot" },
+                            resolve
+                        );
+                    });
+
+                    if (!dataUrl) {
+                        throw new Error('Failed to capture viewport');
+                    }
+
+                    // Draw to canvas
+                    const img = await new Promise((resolve, reject) => {
+                        const image = new Image();
+                        image.onload = () => resolve(image);
+                        image.onerror = reject;
+                        image.src = dataUrl;
+                    });
+
+                    this.ctx.drawImage(img, 0, capturedHeight);
+                    capturedHeight += scrollStep;
+                }
+
+                // 3. Cleanup phase
+                window.scrollTo(0, originalScroll);
+                this.restoreStickyElements();
+
+                // 4. Generate final image
+                const blob = await new Promise(resolve =>
+                    this.canvas.toBlob(resolve, 'image/png')
+                );
+
+                // Create download link
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = `full-page-screenshot-${Date.now()}.png`;
+                link.click();
+
+                // Cleanup
+                URL.revokeObjectURL(url);
+
+            } catch (error) {
+                console.error('Screenshot error:', error);
+                chrome.runtime.sendMessage({
+                    action: "handleError",
+                    message: "Screenshot failed: " + error.message
+                });
+                this.restoreStickyElements();
+            }
+        }
+    }
+
+    // Initialize and start capture when requested
+    if (window.scrollingScreenshotRequested) {
+        const screenshotManager = new ScreenshotManager();
+        screenshotManager.captureFullPage();
+        delete window.scrollingScreenshotRequested;
     }
 })();

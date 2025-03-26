@@ -81,18 +81,28 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     }
 });
 
+// Add to background.js
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-    if (message.action === "captureVisibleTab") {
-        chrome.tabs.captureVisibleTab((dataUrl) => {
-            if (chrome.runtime.lastError || !dataUrl) {
+    if (message.action === "captureVisibleTab" && message.from === "screenshot") {
+        console.log('Processing capture request:', message.source);
+
+        // For test messages, respond immediately
+        if (message.source === "test") {
+            sendResponse(true);
+            return true;
+        }
+
+        // Capture the tab
+        chrome.tabs.captureVisibleTab(null, {format: 'png'}, (dataUrl) => {
+            if (chrome.runtime.lastError) {
+                console.error('Capture error:', chrome.runtime.lastError);
                 sendResponse(null);
             } else {
+                console.log('Capture successful');
+                activeScreenshotTab = sender.tab?.id || null;
                 sendResponse(dataUrl);
             }
         });
-        return true; // Indicates a response will be sent asynchronously
-    } else if (message.action === "handleError") {
-        // Error handling (if needed for backend logic)
-        console.error("Error from content script:", message.message);
+        return true; // Will respond asynchronously
     }
 });

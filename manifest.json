@@ -25,7 +25,7 @@
         "<all_urls>"
       ],
       "js": [
-        "pages/Hex/hexPickerContent.js", "pages/Screenshot/screenshotContent.js"
+        "pages/Hex/hexPickerContent.js"
       ],
       "run_at": "document_end"
     }
