@@ -69,7 +69,6 @@
     height: 100px;
     padding: $padding-medium;
     background-color: $tool-screenshot;
-    border: none;
     font-size: 1.25rem;
     border-radius: $border-radius;
     cursor: pointer;
@@ -102,7 +101,6 @@
     padding: $padding-small $padding-medium;
     background-color: $tool-screenshot;
     color: white;
-    border: none;
     border-radius: $border-radius;
     cursor: pointer;
 
@@ -131,5 +129,15 @@
   &--error {
     background-color: #f44336;
     color: white;
+  }
+}
+.screenshot__button {
+  &[disabled] {
+    opacity: 0.5;
+    cursor: not-allowed;
+
+    &:hover {
+      background-color: $tool-screenshot;
+    }
   }
 }

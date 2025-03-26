@@ -82,39 +82,22 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 });
 
 
-
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     if (message.action === "captureVisibleTab" && message.from === "screenshot") {
-        chrome.tabs.captureVisibleTab(null, { format: "png" }, dataUrl => {
-            if (chrome.runtime.lastError) {
-                console.error(chrome.runtime.lastError);
-                sendResponse(null);
-            } else {
-                sendResponse(dataUrl);
-            }
-        });
-        return true;
-    }
-
-    if (message.action === "screenshotCompleted") {
-        console.log('Screenshot completed, preparing download...');
         try {
-            chrome.downloads.download({
-                url: message.dataUrl,
-                filename: `scrolling-screenshot-${message.timestamp}.png`,
-                saveAs: false
-            }, downloadId => {
+            chrome.tabs.captureVisibleTab(null, { format: "png" }, dataUrl => {
                 if (chrome.runtime.lastError) {
-                    console.error('Download error:', chrome.runtime.lastError);
-                    sendResponse({status: 'error', error: chrome.runtime.lastError});
+                    console.error("Screenshot capture error:", chrome.runtime.lastError);
+                    sendResponse(null);
                 } else {
-                    sendResponse({status: 'success', downloadId});
+                    sendResponse(dataUrl);
                 }
             });
+            return true;
         } catch (error) {
-            console.error('Screenshot download error:', error);
-            sendResponse({status: 'error', error: error.message});
+            console.error("Screenshot capture error:", error);
+            sendResponse(null);
+            return true;
         }
-        return true;
     }
 });
