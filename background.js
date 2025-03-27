@@ -8,10 +8,25 @@ function saveTimerState() {
     chrome.storage.local.set({ totalSeconds });
 }
 
+function openPopupWithTimer() {
+    chrome.storage.local.get(['completed'], (result) => {
+        if (result.completed) {
+            chrome.action.setPopup({ popup: 'pages/Timer/Timer.html' }, () => {
+                chrome.action.openPopup().catch(() => {
+                    chrome.storage.local.set({ showNotification: true });
+                });
+            });
+        }
+    });
+}
+
 function startCountdown(newSeconds = null) {
     if (countdownInterval) return;
 
-    if (newSeconds !== null) totalSeconds = newSeconds;
+    if (newSeconds !== null) {
+        totalSeconds = newSeconds;
+        saveTimerState();
+    }
 
     countdownInterval = setInterval(() => {
         if (totalSeconds > 0) {
@@ -20,7 +35,9 @@ function startCountdown(newSeconds = null) {
         } else {
             clearInterval(countdownInterval);
             countdownInterval = null;
-            chrome.storage.local.set({ completed: true });
+            chrome.storage.local.set({ completed: true, showNotification: true}, () => {
+                openPopupWithTimer();
+            });
         }
     }, 1000);
 }
@@ -39,11 +56,14 @@ function resetCountdown() {
     chrome.storage.local.set({ totalSeconds });
 }
 
-// Consolidated message listener
+// Message listeners
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     // Timer commands
     if (message.command) {
         switch (message.command) {
+            case "navigateToTimer":
+                openPopupWithTimer();
+                break;
             case "start":
                 startCountdown(message.totalSeconds || null);
                 sendResponse({ status: "started" });
@@ -59,8 +79,11 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
             case "getTime":
                 sendResponse({ totalSeconds });
                 break;
+            case "initializePopup":
+                chrome.action.setPopup({ popup: 'index.html' });
+                break;
         }
-        return;
+        return true;
     }
 
     // Color picker handling

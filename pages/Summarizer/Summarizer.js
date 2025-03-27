@@ -1,6 +1,5 @@
 import config from '../../config.js';
 
-
 const summarizeButton = document.getElementById("summarize-button");
 const summaryOutput = document.getElementById("summary-output");
 
@@ -63,7 +62,6 @@ async function extractArticleContent() {
                 (results) => {
                     clearTimeout(timeoutId);
 
-                    // Check and handle results from scripting API
                     if (chrome.runtime.lastError) {
                         console.error("Error in executeScript:", chrome.runtime.lastError.message);
                         return reject(`Script execution error: ${chrome.runtime.lastError.message}`);
@@ -145,11 +143,9 @@ summarizeButton.addEventListener("click", async () => {
     summaryOutput.value = "Extracting content...";
 
     try {
-        // Step 1: Extract the content
         const articleContent = await extractArticleContent();
 
         if (articleContent && articleContent.trim() !== "Content not found.") {
-            // Step 2: Pass the content to the Gemini API
             summaryOutput.value = "Generating summary... Please wait.";
             const summary = await fetchSummary(articleContent);
             summaryOutput.value = summary;

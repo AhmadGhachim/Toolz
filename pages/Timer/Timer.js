@@ -6,7 +6,7 @@ const minutesInput = document.getElementById('minutes');
 const secondsInput = document.getElementById('seconds');
 const container = document.querySelector(".timer__container");
 
-// Helper function for notifications
+
 const showNotification = (background, text) => {
     const notification = document.createElement("div");
     notification.className = "timer__notification";
@@ -20,22 +20,29 @@ const showNotification = (background, text) => {
     }, 2000);
 };
 
-// Update the countdown display
+
 function updateCountdownDisplay(totalSeconds) {
     const mins = Math.floor(totalSeconds / 60);
     const secs = totalSeconds % 60;
     countdownDisplay.textContent = `${String(mins).padStart(2, "0")}:${String(secs).padStart(2, "0")}`;
 }
 
-// Load timer state from storage
+
 function loadTimerState() {
-    chrome.storage.local.get(["totalSeconds"], (result) => {
+    chrome.storage.local.get(["totalSeconds", "showNotification"], (result) => {
         const totalSeconds = result.totalSeconds || 0;
         updateCountdownDisplay(totalSeconds);
+
+        if (result.showNotification) {
+            showNotification("#4CAF50", "Timer Complete!");
+            chrome.storage.local.set({
+                showNotification: false,
+                completed: false
+            });
+        }
     });
 }
 
-// Start button functionality
 startButton.addEventListener("click", () => {
     chrome.runtime.sendMessage({ command: "getTime" }, (response) => {
         const remainingSeconds = response.totalSeconds || 0;
@@ -56,35 +63,34 @@ startButton.addEventListener("click", () => {
 
             chrome.runtime.sendMessage({ command: "start", totalSeconds }, (res) => {
                 console.log(res.status);
+                updateCountdownDisplay(totalSeconds);
             });
         }
     });
 });
 
-// Pause button functionality
+
 pauseButton.addEventListener("click", () => {
     chrome.runtime.sendMessage({ command: "pause" }, (response) => {
         console.log(response.status);
     });
 });
 
-// Reset button functionality
+y
 resetButton.addEventListener("click", () => {
     chrome.runtime.sendMessage({ command: "reset" }, (response) => {
         console.log(response.status);
         updateCountdownDisplay(0);
-
     });
 });
 
-// Update UI every second with the timer state
-setInterval(() => {
-    chrome.runtime.sendMessage({ command: "getTime" }, (response) => {
-        if (response && typeof response.totalSeconds !== "undefined") {
-            updateCountdownDisplay(response.totalSeconds);
-        }
-    });
-}, 1000);
 
-// Load timer display state initially
-loadTimerState();
+setInterval(() => {
+    loadTimerState();
+}, 500);
+
+
+document.addEventListener('DOMContentLoaded', () => {
+    loadTimerState();
+    chrome.runtime.sendMessage({ command: "initializePopup" });
+});
