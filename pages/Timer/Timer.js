@@ -76,7 +76,7 @@ pauseButton.addEventListener("click", () => {
     });
 });
 
-y
+
 resetButton.addEventListener("click", () => {
     chrome.runtime.sendMessage({ command: "reset" }, (response) => {
         console.log(response.status);
