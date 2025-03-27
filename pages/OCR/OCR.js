@@ -1,97 +1,157 @@
 import config from '../../config.js';
 
 class OCRProcessor {
-    constructor() {
-        this.apiKey = config.OCR_KEY;
-        this.fileInput = document.getElementById('fileInput');
-        this.dropZone = document.getElementById('dropZone');
-        this.extractButton = document.getElementById('extract-button');
-        this.outputText = document.getElementById('extracted-text');
-        this.copyIcon = document.getElementById('copy-icon');
-        this.uploadContent = document.querySelector('.ocr__upload-content');
-        this.currentFile = null;
+    #apiKey;
+    #currentFile;
+    #elements;
 
-        this.initializeEventListeners();
+    constructor() {
+        this.#apiKey = config.OCR_KEY;
+        this.#currentFile = null;
+        this.#initializeElements();
+        this.#initializeEventListeners();
     }
 
-        initializeEventListeners() {
+    #initializeElements() {
+        this.#elements = {
+            fileInput: document.getElementById('fileInput'),
+            dropZone: document.getElementById('dropZone'),
+            extractButton: document.getElementById('extract-button'),
+            outputText: document.getElementById('extracted-text'),
+            copyIcon: document.getElementById('copy-icon'),
+            uploadContent: document.querySelector('.ocr__upload-content')
+        };
+    }
 
-        this.fileInput.addEventListener('change', (e) => this.handleFileSelect(e));
+    #initializeEventListeners() {
+        const { fileInput, dropZone, extractButton, copyIcon } = this.#elements;
 
-        this.dropZone.addEventListener('click', () => {
-            this.fileInput.click();
+        fileInput.addEventListener('change', (e) => this.#handleFileSelect(e));
+        dropZone.addEventListener('click', () => fileInput.click());
+        extractButton.addEventListener('click', () => this.#extractText());
+        copyIcon.addEventListener('click', () => this.#copyToClipboard());
+
+        // Add drag and drop support
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.classList.add('dragover');
         });
 
+        dropZone.addEventListener('dragleave', () => {
+            dropZone.classList.remove('dragover');
+        });
 
-        this.extractButton.addEventListener('click', () => this.extractText());
-
-        this.copyIcon.addEventListener('click', () => this.copyToClipboard());
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('dragover');
+            const file = e.dataTransfer.files[0];
+            if (file) this.#handleFile(file);
+        });
     }
 
-    handleFileSelect(event) {
+    #handleFileSelect(event) {
         const file = event.target.files[0];
         if (file) {
-            this.handleFile(file);
+            this.#handleFile(file);
         }
     }
 
-    handleFile(file) {
-        if (file && file.type.startsWith('image/')) {
-            this.currentFile = file;
-            this.extractButton.disabled = false;
-            this.outputText.value = '';
+    #handleFile(file) {
+        const { extractButton, outputText, uploadContent } = this.#elements;
 
-            this.uploadContent.innerHTML = `
-                <p style="color: #72C2E0;">✓ ${file.name}</p>
-                <p style="font-size: 0.8rem;">Click to upload a different image</p>
-            `;
+        if (!file.type.startsWith('image/')) {
+            this.#showError('Please select an image file.');
+            return;
+        }
+
+        this.#currentFile = file;
+        extractButton.disabled = false;
+        outputText.value = '';
+
+        uploadContent.innerHTML = `
+            <p style="color: #72C2E0;">✓ ${file.name}</p>
+            <p style="font-size: 0.8rem;">Click to upload a different image</p>
+        `;
+    }
+
+    #showError(message) {
+        const { outputText } = this.#elements;
+        outputText.value = `Error: ${message}`;
+    }
+
+    async #extractText() {
+        const { extractButton, outputText } = this.#elements;
+
+        if (!this.#currentFile) {
+            this.#showError('Please select an image first.');
+            return;
+        }
+
+        extractButton.disabled = true;
+        outputText.value = 'Processing...';
+
+        try {
+            const result = await this.#performOCR();
+            this.#handleOCRResult(result);
+        } catch (error) {
+            this.#showError(error.message);
+        } finally {
+            extractButton.disabled = false;
         }
     }
 
-
-    async extractText() {
-        if (!this.currentFile) return;
-
-        this.extractButton.disabled = true;
-        this.outputText.value = 'Processing...';
-
+    async #performOCR() {
         const formData = new FormData();
-        formData.append('apikey', this.apiKey);
-        formData.append('file', this.currentFile);
+        formData.append('apikey', this.#apiKey);
+        formData.append('file', this.#currentFile);
         formData.append('language', 'eng');
         formData.append('OCREngine', '2');
 
-        try {
-            const response = await fetch('https://api.ocr.space/parse/image', {
-                method: 'POST',
-                body: formData
-            });
+        const response = await fetch('https://api.ocr.space/parse/image', {
+            method: 'POST',
+            body: formData
+        });
 
-            const result = await response.json();
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
 
-            if (result.OCRExitCode === 1 && result.ParsedResults) {
-                this.outputText.value = result.ParsedResults[0].ParsedText;
-            } else {
-                this.outputText.value = 'Error: Could not extract text from image.';
-            }
-        } catch (error) {
-            this.outputText.value = `Error: ${error.message}`;
-        } finally {
-            this.extractButton.disabled = false;
+        return await response.json();
+    }
+
+    #handleOCRResult(result) {
+        const { outputText } = this.#elements;
+
+        if (result.OCRExitCode === 1 && result.ParsedResults?.[0]?.ParsedText) {
+            outputText.value = result.ParsedResults[0].ParsedText;
+        } else {
+            this.#showError('Could not extract text from image.');
         }
     }
 
-    copyToClipboard() {
-        navigator.clipboard.writeText(this.outputText.value)
-            .then(() => {
-                this.copyIcon.style.opacity = '0.5';
-                setTimeout(() => this.copyIcon.style.opacity = '1', 200);
-            })
-            .catch(err => console.error('Failed to copy text:', err));
+    async #copyToClipboard() {
+        const { copyIcon, outputText } = this.#elements;
+
+        if (!outputText.value) {
+            this.#showError('No text to copy.');
+            return;
+        }
+
+        try {
+            await navigator.clipboard.writeText(outputText.value);
+            this.#showCopyAnimation(copyIcon);
+        } catch (error) {
+            this.#showError('Failed to copy text to clipboard.');
+        }
+    }
+
+    #showCopyAnimation(element) {
+        element.style.opacity = '0.5';
+        setTimeout(() => element.style.opacity = '1', 200);
     }
 }
 
-
+// Initialize the OCR processor when the DOM is ready
 document.addEventListener('DOMContentLoaded', () => {
     new OCRProcessor();
 });
