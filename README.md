@@ -1,6 +1,7 @@
 # Toolz Chrome Extension 🛠️
 
 A powerful Chrome extension that combines essential productivity tools in one place.
+Visit the Chrome Web Store (https://chromewebstore.google.com/detail/toolz/fdjdcmfdhllmllkofddfanglebngpalm?authuser=2&hl=en-GB)
 
 ![logo](https://github.com/user-attachments/assets/fdb1c1df-f472-46d9-9fa0-11f49b7c40ec)
 
@@ -43,7 +44,7 @@ A powerful Chrome extension that combines essential productivity tools in one pl
 ## Installation 💻
 
 ### From Chrome Web Store
-1. Visit the Chrome Web Store (https://chromewebstore.google.com/detail/toolz/fdjdcmfdhllmllkofddfanglebngpalm?authuser=2&hl=en-GB
+1. Visit the Chrome Web Store (https://chromewebstore.google.com/detail/toolz/fdjdcmfdhllmllkofddfanglebngpalm?authuser=2&hl=en-GB)
 2. Click "Add to Chrome"
 3. Follow the browser prompts to complete installation
 
