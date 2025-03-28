@@ -1,7 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "Toolz",
-  "description": "A set of productivity tools including OCR, color picker, screenshot, summarizer, and timer.",
+  "name": "Toolz - OCR, HEX Finder, Timer, AI Summary & Screenshots\n",
+  "description": "All-in-one productivity tools including OCR text extraction, color picker, AI summarizer, screenshot tool, and timer - your essential browser companion.",
+
   "version": "1.5",
   "icons": {
     "16": "assets/images/icon16.png",
