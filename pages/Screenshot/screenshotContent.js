@@ -1,4 +1,3 @@
-
 (function() {
     class ScreenshotManager {
         constructor() {
@@ -98,17 +97,14 @@
                     return;
                 }
 
-                // Setup phase
                 this.setupCanvas();
                 this.handleStickyElements();
 
-                // Store original scroll position
                 const originalScroll = window.scrollY;
                 const viewportHeight = window.innerHeight;
                 let capturedHeight = 0;
                 const totalHeight = this.canvas.height;
 
-                // Capture phase
                 while (capturedHeight < totalHeight) {
                     window.scrollTo(0, capturedHeight);
                     await new Promise(resolve => setTimeout(resolve, 150));
@@ -121,7 +117,6 @@
 
                     const dataUrl = await this.captureSingleViewport();
 
-                    // Draw to canvas
                     const img = await new Promise((resolve, reject) => {
                         const image = new Image();
                         image.onload = () => resolve(image);
@@ -147,11 +142,9 @@
                     }
                 }
 
-                // Cleanup and restore
                 window.scrollTo(0, originalScroll);
                 this.restoreStickyElements();
 
-                // Generate and send final image
                 const finalImage = await new Promise(resolve =>
                     this.canvas.toBlob(resolve, 'image/png')
                 );

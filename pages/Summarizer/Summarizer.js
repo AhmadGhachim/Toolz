@@ -126,11 +126,11 @@ function copyToClipboard() {
     navigator.clipboard.writeText(text).catch(() => {});
 }
 
-// Event Listeners
+
 summarizeButton.addEventListener("click", handleSummarize);
 copyIcon.addEventListener("click", copyToClipboard);
 
-// Initialize
+
 document.addEventListener("DOMContentLoaded", () => {
     summaryOutput.value = "";
 });

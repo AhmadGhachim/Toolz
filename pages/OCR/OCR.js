@@ -31,7 +31,6 @@ class OCRProcessor {
         extractButton.addEventListener('click', () => this.#extractText());
         copyIcon.addEventListener('click', () => this.#copyToClipboard());
 
-        // Add drag and drop support
         dropZone.addEventListener('dragover', (e) => {
             e.preventDefault();
             dropZone.classList.add('dragover');
@@ -151,7 +150,7 @@ class OCRProcessor {
     }
 }
 
-// Initialize the OCR processor when the DOM is ready
+
 document.addEventListener('DOMContentLoaded', () => {
     new OCRProcessor();
 });
