@@ -1,91 +1,80 @@
-# Toolz - Chrome Productivity Extension
+# Toolz Chrome Extension 🛠️
+
+A powerful Chrome extension that combines essential productivity tools in one place.
 
 ![logo](https://github.com/user-attachments/assets/fdb1c1df-f472-46d9-9fa0-11f49b7c40ec)
 
-Toolz is a comprehensive Chrome extension that brings together essential productivity tools in one convenient package. Whether you need to set timers, summarize content, or pick colors, Toolz has got you covered.
+## Tech Stack 🛠️
+- Vanilla JavaScript
+- HTML5
+- SASS
+- Chrome Extension APIs
+- Google Gemini API
+- OCR.space API
 
-Chrome Web Store link: https://chromewebstore.google.com/detail/fdjdcmfdhllmllkofddfanglebngpalm?utm_source=item-share-cb
+## Features ✨
 
-## Features
+### 1. AI Summary 🤖
+- Quickly summarize any webpage content using Google's Gemini AI
+- Clean, concise summaries delivered in 3-5 sentences
+- Copy functionality for easy sharing
 
-### 🕒 Timer
+### 2. OCR (Optical Character Recognition) 📝
+- Extract text from images
+- Supports drag-and-drop or file upload
+- Powered by OCR.space API
+
+### 3. Hex Finder 🎨
+- Pick colors from any webpage
+- Automatically saves color history
+- Click to copy hex codes
+
+### 4. Timer ⏲️
 - Set custom countdown timers
-- Pause and resume functionality
-- Visual notifications
-- Persists across browser sessions
+- Pause, resume, and reset functionality
+- Notification when timer completes
+- Persistent timing across browser sessions
 
-### 🤖 AI Summary
-- Summarize any webpage content using Gemini AI
-- One-click summarization
-- Copy summary to clipboard
-- Clear, concise summaries of long articles
+### 5. Snaps 📸
+- Capture webpage screenshots
+- Automatic file naming with timestamps
+- Simple one-click capture process
 
-### 🎨 Hex Finder
-- Extract color codes from any webpage
-- Click to copy hex values
-- Real-time color preview
-
-### 🔜 Coming Soon
-- OCR (Optical Character Recognition)
-- Screenshot Tool (Snaps)
-
-## Installation
+## Installation 💻
 
 ### From Chrome Web Store
-link: https://chromewebstore.google.com/detail/fdjdcmfdhllmllkofddfanglebngpalm?utm_source=item-share-cb
+1. Visit the Chrome Web Store (https://chromewebstore.google.com/detail/toolz/fdjdcmfdhllmllkofddfanglebngpalm?authuser=2&hl=en-GB
+2. Click "Add to Chrome"
+3. Follow the browser prompts to complete installation
 
-### Local Development Installation
-1. Clone this repository:
+### Local Development Setup
+1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/toolz.git
+git clone [repository-url]
+cd toolz-extension
 ```
-2. Create a `config.js` file from the template:
-```bash
-cp config.template.js config.js
+
+2. Configure API Keys:
+   - Copy `config.template.js` to `config.js`
+   - Add your API keys:
+     - Get Gemini API key from Google AI Studio
+     - Get OCR API key from OCR.space
+
+```javascript
+const config = {
+    API_KEY: "YOUR_GEMINI_API_KEY",
+    OCR_KEY: "YOUR_OCR_SPACE_KEY"
+};
 ```
-3. Add your Gemini API key to `config.js`
-4. Watch SCSS to apply styling.
-5. Open Chrome and navigate to `chrome://extensions/`
-6. Enable "Developer mode" in the top right
-7. Click "Load unpacked" and select the project directory
 
-## Setup
+3. Load in Chrome:
+   - Open Chrome and go to `chrome://extensions/`
+   - Enable "Developer mode"
+   - Click "Load unpacked"
+   - Select the project directory
 
-### API Key Configuration
-1. Get your API key from [Google AI Studio](https://makersuite.google.com/app/apikey)
-2. Copy `config.template.js` to `config.js`
-3. Replace `YOUR_API_KEY_HERE` with your actual Gemini API key
+## Usage 📖
+- Click the Toolz extension icon in your browser toolbar
+- Use the arrow buttons to navigate between tools
+- Select your desired tool and follow the on-screen instructions
 
-## Usage
-
-### Timer
-1. Click the Toolz icon in your Chrome toolbar
-2. Select the Timer tool
-3. Enter minutes and seconds
-4. Use Play, Pause, and Reset controls as needed
-
-### AI Summary
-1. Navigate to any webpage you want to summarize
-2. Click the Toolz icon
-3. Select AI Summary
-4. Click "Summarize Page"
-5. Use the copy icon to copy the summary
-
-### Hex Finder
-1. Select the Hex Finder tool
-2. Click anywhere on the page to get the color code
-3. Color codes are automatically copied to clipboard
-
-## Technical Requirements
-- Chrome Browser (Version 88 or higher)
-- Active internet connection for AI summarization
-- Gemini API key for summarization feature
-
-## Privacy
-- No user data is collected or stored
-- API keys are stored locally in Chrome storage
-- Summarization requests are made directly to Google's Gemini API
-
-
-## Support
-For support, please open an issue in the GitHub repository 
