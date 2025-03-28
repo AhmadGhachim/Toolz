@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Toolz",
   "description": "A set of productivity tools including OCR, color picker, screenshot, summarizer, and timer.",
-  "version": "1.0",
+  "version": "1.5",
   "icons": {
     "16": "assets/images/icon16.png",
     "48": "assets/images/icon48.png",
