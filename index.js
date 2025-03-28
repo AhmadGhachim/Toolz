@@ -2,37 +2,37 @@ const tools = [
     {
         name: 'Timer',
         description: 'Set and manage countdowns.',
-        image: 'assets/images/timer.png',
+        image: 'assets/images/timer.webp',
         backgroundColor: '#F29A9D',
         link: 'pages/Timer/Timer.html'
     },
     {
         name: 'AI Summary',
         description: 'Summarize text using AI.',
-        image: 'assets/images/summary.png',
+        image: 'assets/images/summary.webp',
         backgroundColor: '#A9E5BB',
         link: 'pages/Summarizer/Summarizer.html'
     },
     {
         name: 'Hex Finder',
         description: 'Quickly extract hex colors.',
-        image: 'assets/images/hex.png',
+        image: 'assets/images/hex.webp',
         backgroundColor: '#C3A2E8',
         link: 'pages/Hex/Hex.html'
     },
     {
         name: 'OCR',
-        description: 'coming soon...',
-        image: 'assets/images/ocr.png',
+        description: 'Extract text from images.',
+        image: 'assets/images/ocr.webp',
         backgroundColor: '#91D9F8',
-        link: ''
+        link: 'pages/OCR/OCR.html'
     },
     {
         name: 'Snaps',
-        description: 'coming soon...',
-        image: 'assets/images/screenshot.png',
+        description: 'A webpage screenshot tool.',
+        image: 'assets/images/screenshot.webp',
         backgroundColor: '#FFB380',
-        link: ''
+        link: 'pages/Screenshot/Screenshot.html'
     }
 
 ];

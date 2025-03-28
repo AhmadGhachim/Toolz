@@ -25,22 +25,28 @@
         "<all_urls>"
       ],
       "js": [
-        "hexPickerContent.js"
-      ]
+        "pages/Hex/hexPickerContent.js"
+      ],
+      "run_at": "document_end"
     }
   ],
   "permissions": [
     "activeTab",
     "scripting",
     "storage",
-    "clipboardWrite"
+    "clipboardWrite",
+    "desktopCapture",
+    "downloads",
+    "offscreen"
   ],
   "host_permissions": [
     "<all_urls>"
   ],
   "web_accessible_resources": [
     {
-      "resources": ["assets/fonts/*", "assets/images/*", "pages/*", "styles/*"],
+      "resources": ["assets/fonts/*", "assets/images/*", "pages/*", "styles/*", "pages/Screenshot/offscreen.html",
+        "pages/Screenshot/offscreen.js"
+      ],
       "matches": ["<all_urls>"]
     }
   ]

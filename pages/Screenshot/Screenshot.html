@@ -2,9 +2,30 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Screenshot Tool</title>
+    <link rel="stylesheet" href="Screenshot.css">
 </head>
 <body>
+<main class="screenshot">
+    <div class="screenshot__container">
+        <header class="screenshot__header">
+            <a href="../../index.html" class="screenshot__back-button">←</a>
+            <h1 class="screenshot__title">Screenshot</h1>
+        </header>
 
+        <div class="screenshot__options">
+            <button class="screenshot__button screenshot__button--window">
+                <span>Window Screenshot</span>
+            </button>
+
+            <button class="screenshot__button screenshot__button--scrolling" disabled>
+                <span>Scrolling Screenshot (Coming Soon)</span>
+            </button>
+        </div>
+        <div class="screenshot__notification"></div>
+
+    </div>
+</main>
+<script src="Screenshot.js"></script>
 </body>
 </html>

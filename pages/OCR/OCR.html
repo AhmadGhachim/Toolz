@@ -2,9 +2,42 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="OCR.css">
+    <title>Toolz - OCR</title>
 </head>
 <body>
+<main class="ocr">
+    <div class="ocr__container">
+        <header class="ocr__header">
+            <a href="../../index.html" class="ocr__back-button">←</a>
+            <h1 class="ocr__title">OCR</h1>
+        </header>
 
+        <section class="ocr__input">
+            <div class="ocr__upload-area" id="dropZone">
+                <input type="file" id="fileInput" accept="image/*" hidden>
+                <div class="ocr__upload-content">
+                    <p>Click to Upload Image</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="ocr__output">
+            <label for="extracted-text" class="ocr__label">Extracted Text</label>
+            <img id="copy-icon" src="../../assets/images/Copy.webp" alt="Copy to clipboard" class="clipboard-icon" />
+            <textarea id="extracted-text" class="ocr__textarea" readonly placeholder="Extracted text will appear here."></textarea>
+        </section>
+
+        <section class="ocr__controls">
+            <button id="extract-button" class="ocr__button" disabled>Extract Text</button>
+        </section>
+
+        <footer class="ocr__footer">
+            <p class="ocr__disclaimer">Powered by OCR.space</p>
+        </footer>
+    </div>
+</main>
+<script type="module" src="OCR.js"></script>
 </body>
 </html>
