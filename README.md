@@ -74,8 +74,4 @@ const config = {
    - Click "Load unpacked"
    - Select the project directory
 
-## Usage 📖
-- Click the Toolz extension icon in your browser toolbar
-- Use the arrow buttons to navigate between tools
-- Select your desired tool and follow the on-screen instructions
 
